@@ -33,6 +33,7 @@ class _MainMenuPageState extends State<MainMenuPage> {
   List<Dish> _dishes = [
     Dish(
       id: 0,
+      description: "Пальчики оближешь!",
       name: "Бургер",
       price: "120",
       subName: "Сочный и вкусный",
@@ -41,6 +42,7 @@ class _MainMenuPageState extends State<MainMenuPage> {
     ),
     Dish(
       id: 1,
+      description: "Пальчики оближешь!",
       name: "Бургер",
       price: "120",
       subName: "Сочный и вкусный",
@@ -49,6 +51,7 @@ class _MainMenuPageState extends State<MainMenuPage> {
     ),
     Dish(
       id: 2,
+      description: "Пальчики оближешь!",
       name: "Бургер",
       price: "120",
       subName: "Сочный и вкусный",
@@ -58,6 +61,7 @@ class _MainMenuPageState extends State<MainMenuPage> {
     Dish(
       id: 3,
       name: "Бургер",
+      description: "Пальчики оближешь!",
       price: "120",
       subName: "Сочный и вкусный",
       image: CachedNetworkImageProvider(
@@ -66,6 +70,7 @@ class _MainMenuPageState extends State<MainMenuPage> {
     Dish(
       id: 4,
       name: "Бургер",
+      description: "Пальчики оближешь!",
       price: "120",
       subName: "Сочный и вкусный",
       image: CachedNetworkImageProvider(

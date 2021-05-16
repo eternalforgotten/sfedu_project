@@ -56,7 +56,7 @@ class UpperIcons extends StatelessWidget {
                 color: Theme.of(context).primaryColor,
                 borderRadius: BorderRadius.circular(10),
               ),
-              child: Icon(Icons.lock, color: Colors.white),
+              child: Icon(Icons.shopping_cart_outlined, color: Colors.white),
             ),
           ),
         ],

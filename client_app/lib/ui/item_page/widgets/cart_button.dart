@@ -23,21 +23,10 @@ class CartButton extends StatelessWidget {
           color: Theme.of(context).primaryColor,
           borderRadius: BorderRadius.circular(10),
         ),
-        child: Row(
-          mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-          children: <Widget>[
-            Icon(
-              Icons.shopping_cart_outlined,
-              size: ResponsiveSize.responsiveHeight(16, context),
-              color: Colors.white,
-            ),
-            Text(
-              "0",
-              style: TextStyle(
-                color: Colors.white,
-              ),
-            )
-          ],
+        child: Icon(
+          Icons.shopping_cart_outlined,
+          size: ResponsiveSize.responsiveHeight(24, context),
+          color: Colors.white,
         ),
       ),
     );

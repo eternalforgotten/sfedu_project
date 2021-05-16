@@ -73,7 +73,7 @@ class ItemPage extends StatelessWidget {
                         ),
                         Container(
                           alignment: Alignment.centerLeft,
-                          child: Description("Описание товара, добавить в поле"),
+                          child: Description(dish.description),
                         ),
                       ],
                     ),
