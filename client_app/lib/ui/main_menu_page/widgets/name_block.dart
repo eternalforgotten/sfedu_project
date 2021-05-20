@@ -40,7 +40,7 @@ class NameBlock extends StatelessWidget {
           CircleAvatar(
             radius: ResponsiveSize.responsiveHeight(38, context),
             backgroundImage: ResizeImage(
-              NetworkImage('https://images-na.ssl-images-amazon.com/images/I/A18N0JMxzPL.jpg'),
+              AssetImage('assets/mealtime.png'),
               height: (ResponsiveSize.responsiveHeight(38, context) * 4).ceil(),
               width: (ResponsiveSize.responsiveHeight(38, context) * 4).ceil(),
             ),

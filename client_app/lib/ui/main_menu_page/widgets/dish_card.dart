@@ -112,14 +112,15 @@ class DishCard extends StatelessWidget {
                             ),
                             GestureDetector(
                               onTap: () {
-                                if (Repo.repoCart.contains(dish)){
+                                if (Repo.repoCart.contains(dish)) {
                                   dish.quantity++;
-                                }
-                                else{
+                                } else {
                                   Repo.repoCart.add(dish);
                                 }
-                                ScaffoldMessenger.of(context).removeCurrentSnackBar();
-                                ScaffoldMessenger.of(context).showSnackBar(addedDishSnackBar());
+                                ScaffoldMessenger.of(context)
+                                    .removeCurrentSnackBar();
+                                ScaffoldMessenger.of(context)
+                                    .showSnackBar(addedDishSnackBar());
                               },
                               child: Container(
                                 height: ResponsiveSize.responsiveHeight(
@@ -158,11 +159,11 @@ class DishCard extends StatelessWidget {
                   width: ResponsiveSize.responsiveHeight(70, context),
                   height: ResponsiveSize.responsiveHeight(70, context),
                   child: Image(
+                    fit: BoxFit.cover,
                     image: ResizeImage(
                       dish.image,
                       width:
                           ResponsiveSize.responsiveWidth(200, context).round(),
-                      // height: ResponsiveSize.responsiveWidth(140).round(),
                     ),
                   ),
                 ),
