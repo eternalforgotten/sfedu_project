@@ -27,6 +27,9 @@ dependencies:
   google_fonts: ^1.1.0
   font_awesome_flutter: ^9.0.0
   cached_network_image: ^2.2.0
+  mask_text_input_formatter: ^1.0.6
+  timer_count_down: ^1.0.4
+  pin_code_fields: ^4.0.0
   
 
 

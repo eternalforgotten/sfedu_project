@@ -1,9 +1,9 @@
 import 'package:flutter/material.dart';
 
-SnackBar addedDishSnackBar(){
+SnackBar simpleSnackBar(String text){
   return SnackBar(
     content: Text(
-      "Блюдо успешно добавлено в корзину!"
+      text
     ),
   );
 }

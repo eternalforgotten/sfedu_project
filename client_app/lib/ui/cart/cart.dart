@@ -1,4 +1,4 @@
-import 'package:client_app/UI/item_page/widgets/pop_back_button.dart';
+import 'package:client_app/ui/item_page/widgets/pop_back_button.dart';
 import 'package:client_app/responsive_size.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';

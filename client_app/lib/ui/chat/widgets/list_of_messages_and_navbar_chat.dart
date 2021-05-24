@@ -1,4 +1,4 @@
-import 'package:client_app/UI/chat/widgets/chat_message.dart';
+import 'package:client_app/ui/chat/widgets/chat_message.dart';
 import 'package:client_app/classes/message.dart';
 import 'package:client_app/responsive_size.dart';
 import 'package:flutter/cupertino.dart';
@@ -71,17 +71,14 @@ class _ListOfMessagesAndNavbarChatState
             ),
             height: ResponsiveSize.responsiveHeight(576, context),
             child: SmartRefresher(
-              //нужен для догрузки истории при пролистывании её вверх
               enablePullUp: true, //
-              enablePullDown:
-                  false, //делаем, чтоб обновление происходило при пролистывании вверх
+              enablePullDown: false,
               reverse: true, //
               footer: CustomFooter(
-                //виджет, отображающийся вверху истории при подгрузке новых сообщений
                 builder: (context, mode) {
                   Widget body;
                   if (mode == LoadStatus.idle) {
-                    body = Text(""); //TODO: Подумать, что выводить
+                    body = Text("");
                   } else if (mode == LoadStatus.loading) {
                     body = CircularProgressIndicator(
                       backgroundColor: Theme.of(context).accentColor,
@@ -104,8 +101,7 @@ class _ListOfMessagesAndNavbarChatState
               header: null,
               controller: _refreshController,
               onLoading: () async {
-                _refreshController
-                    .loadComplete(); //прекращение действия раюоты контроллера
+                _refreshController.loadComplete();
               },
               child: ListView.builder(
                 controller: _controller,

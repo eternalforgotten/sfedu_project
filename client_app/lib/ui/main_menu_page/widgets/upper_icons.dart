@@ -17,7 +17,7 @@ class UpperIcons extends StatelessWidget {
         children: <Widget>[
           GestureDetector(
             onTap: () async {
-              Scaffold.of(context).removeCurrentSnackBar();
+              ScaffoldMessenger.of(context).removeCurrentSnackBar();
               FocusScope.of(context).unfocus();
               Navigator.of(context).push(
                 MaterialPageRoute(
@@ -45,7 +45,7 @@ class UpperIcons extends StatelessWidget {
           GestureDetector(
             onTap: () async {
               FocusScope.of(context).unfocus();
-              Scaffold.of(context).removeCurrentSnackBar();
+              ScaffoldMessenger.of(context).removeCurrentSnackBar();
               await Navigator.of(context)
                   .push(MaterialPageRoute(builder: (_) => CartPage()));
             },

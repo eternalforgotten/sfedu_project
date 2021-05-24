@@ -120,7 +120,7 @@ class DishCard extends StatelessWidget {
                                 ScaffoldMessenger.of(context)
                                     .removeCurrentSnackBar();
                                 ScaffoldMessenger.of(context)
-                                    .showSnackBar(addedDishSnackBar());
+                                    .showSnackBar(simpleSnackBar("Блюдо успешно добавлено в корзину!"));
                               },
                               child: Container(
                                 height: ResponsiveSize.responsiveHeight(

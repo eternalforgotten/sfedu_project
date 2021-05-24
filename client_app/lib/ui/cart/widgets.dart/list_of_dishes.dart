@@ -1,5 +1,3 @@
-import 'package:cached_network_image/cached_network_image.dart';
-import 'package:client_app/main.dart';
 import 'package:client_app/repo.dart';
 import 'package:client_app/responsive_size.dart';
 
@@ -46,7 +44,6 @@ class ListOfDishes extends StatelessWidget {
                       child: Container(
                         height: ResponsiveSize.responsiveHeight(26, context),
                         width: ResponsiveSize.responsiveHeight(26, context),
-                        
                       ),
                       alignment: Alignment.centerRight,
                     ),

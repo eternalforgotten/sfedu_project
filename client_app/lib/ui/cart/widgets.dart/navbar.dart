@@ -1,5 +1,7 @@
+import 'package:client_app/added_dish_snackbar.dart';
 import 'package:client_app/repo.dart';
 import 'package:client_app/responsive_size.dart';
+import 'package:client_app/ui/order_verification/verification_number_page/verification_number_page.dart';
 import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
 
@@ -38,7 +40,17 @@ class Navbar extends StatelessWidget {
             ],
           ),
           GestureDetector(
-            onTap: () {},
+            onTap: () {
+              Repo.repoCart.isNotEmpty
+                  ? Navigator.of(context).push(
+                      MaterialPageRoute(
+                        builder: (_) => VerificationNumberPage(),
+                      ),
+                    )
+                  : ScaffoldMessenger.of(context).showSnackBar(
+                      simpleSnackBar("Добавьте блюда в корзину!"),
+                    );
+            },
             child: Container(
               width: ResponsiveSize.responsiveWidth(220, context),
               height: ResponsiveSize.responsiveHeight(52, context),
