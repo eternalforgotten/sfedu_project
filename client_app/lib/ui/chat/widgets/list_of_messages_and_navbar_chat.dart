@@ -8,15 +8,6 @@ import 'package:flutter/material.dart';
 
 // ignore: must_be_immutable
 class ListOfMessagesAndNavbarChat extends StatefulWidget {
-  bool sendMessage;
-  //final Order order;
-
-  ListOfMessagesAndNavbarChat(this.sendMessage, {Key key}) : super(key: key);
-//Отправляем сообщение при заходе из корзины
-  void messageSent() {
-    sendMessage = false;
-  }
-
   @override
   _ListOfMessagesAndNavbarChatState createState() =>
       _ListOfMessagesAndNavbarChatState();

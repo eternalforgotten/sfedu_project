@@ -14,7 +14,7 @@ class CartButton extends StatelessWidget {
         FocusScope.of(context).unfocus();
 
         await Navigator.of(context)
-            .push(MaterialPageRoute(builder: (_) => CartPage()));
+            .pushNamed('/cart');
       },
       child: Container(
         height: ResponsiveSize.responsiveHeight(40, context),

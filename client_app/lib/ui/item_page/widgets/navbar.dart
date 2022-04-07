@@ -1,8 +1,10 @@
 import 'package:client_app/added_dish_snackbar.dart';
+import 'package:client_app/business_logic/cart_bloc/cart_bloc.dart';
 import 'package:client_app/classes/dish.dart';
-import 'package:client_app/repo.dart';
+import 'package:client_app/repos/repo.dart';
 import 'package:client_app/responsive_size.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
 
 class Navbar extends StatelessWidget {
   final Dish dish;
@@ -17,13 +19,10 @@ class Navbar extends StatelessWidget {
       ),
       child: GestureDetector(
         onTap: () {
-          if (Repo.repoCart.contains(dish)) {
-            dish.quantity++;
-          } else {
-            Repo.repoCart.add(dish);
-          }
+          BlocProvider.of<CartBloc>(context).add(AddOrIncrementEvent(dish));
           ScaffoldMessenger.of(context).removeCurrentSnackBar();
-          ScaffoldMessenger.of(context).showSnackBar(simpleSnackBar("Блюдо успешно добавлено в корзину!"));
+          ScaffoldMessenger.of(context).showSnackBar(
+              simpleSnackBar("Блюдо успешно добавлено в корзину!"));
         },
         child: Container(
           width: ResponsiveSize.responsiveWidth(220, context),

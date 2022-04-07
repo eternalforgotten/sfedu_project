@@ -1,7 +1,7 @@
 import 'package:cached_network_image/cached_network_image.dart';
 
 class Dish {
-  final int id;
+  final String id;
   final String name;
   final String subName;
   final String price;
@@ -17,4 +17,12 @@ class Dish {
     this.subName,
     this.description,
   });
+
+  Dish.fromJson(Map<String, dynamic> json, String firebaseId) : 
+    id = firebaseId,
+    image = CachedNetworkImageProvider(json['image_url']),
+    description = json['description'],
+    name = json['name'],
+    price = json['price'].toString(),
+    subName = json['sub_name'];
 }

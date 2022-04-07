@@ -4,16 +4,15 @@ import 'package:client_app/ui/chat/widgets/list_of_messages_and_navbar_chat.dart
 import 'package:flutter/material.dart';
 
 class Chat extends StatelessWidget {
-  final bool sendMessage;
-
-  const Chat({Key key, this.sendMessage = false}) : super(key: key);
+  const Chat({Key key}) : super(key: key);
   void showConnectionsStatus(BuildContext context, String content) {
     ScaffoldMessenger.of(context).showSnackBar(
       SnackBar(
         behavior: SnackBarBehavior.floating,
         action: SnackBarAction(
           label: "Hide",
-          onPressed: () => ScaffoldMessenger.of(context).removeCurrentSnackBar(),
+          onPressed: () =>
+              ScaffoldMessenger.of(context).removeCurrentSnackBar(),
         ),
         duration: Duration(seconds: 2),
         content: Row(
@@ -35,11 +34,7 @@ class Chat extends StatelessWidget {
           body: Column(
             children: <Widget>[
               AppbarChat(),
-              Expanded(
-                child: ListOfMessagesAndNavbarChat(
-                  sendMessage,
-                )
-              ),
+              Expanded(child: ListOfMessagesAndNavbarChat()),
             ],
           ),
         ),

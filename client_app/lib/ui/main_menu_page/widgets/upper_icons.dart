@@ -19,10 +19,8 @@ class UpperIcons extends StatelessWidget {
             onTap: () async {
               ScaffoldMessenger.of(context).removeCurrentSnackBar();
               FocusScope.of(context).unfocus();
-              Navigator.of(context).push(
-                MaterialPageRoute(
-                  builder: (_) => Chat(),
-                ),
+              Navigator.of(context).pushNamed(
+                '/chat'
               );
             },
             child: Container(
@@ -47,7 +45,7 @@ class UpperIcons extends StatelessWidget {
               FocusScope.of(context).unfocus();
               ScaffoldMessenger.of(context).removeCurrentSnackBar();
               await Navigator.of(context)
-                  .push(MaterialPageRoute(builder: (_) => CartPage()));
+                  .pushNamed('/cart');
             },
             child: Container(
               height: ResponsiveSize.responsiveHeight(40, context),

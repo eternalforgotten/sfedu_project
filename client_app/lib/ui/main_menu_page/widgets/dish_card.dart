@@ -1,9 +1,11 @@
 import 'package:client_app/added_dish_snackbar.dart';
+import 'package:client_app/business_logic/cart_bloc/cart_bloc.dart';
 import 'package:client_app/classes/dish.dart';
-import 'package:client_app/repo.dart';
+import 'package:client_app/repos/repo.dart';
 import 'package:client_app/responsive_size.dart';
 import 'package:client_app/ui/item_page/item_page.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:google_fonts/google_fonts.dart';
 
 class DishCard extends StatelessWidget {
@@ -15,11 +17,10 @@ class DishCard extends StatelessWidget {
     return GestureDetector(
       onTap: () async {
         FocusScope.of(context).unfocus();
-        await Navigator.push(
+        await Navigator.pushNamed(
           context,
-          MaterialPageRoute(
-            builder: (context) => ItemPage(dish: dish),
-          ),
+          '/item',
+          arguments: dish
         );
       },
       child: Container(
@@ -28,7 +29,7 @@ class DishCard extends StatelessWidget {
           left: ResponsiveSize.responsiveWidth(56, context),
         ),
         child: Stack(
-          overflow: Overflow.visible,
+          clipBehavior: Clip.none,
           alignment: Alignment.centerLeft,
           children: <Widget>[
             Container(
@@ -112,15 +113,12 @@ class DishCard extends StatelessWidget {
                             ),
                             GestureDetector(
                               onTap: () {
-                                if (Repo.repoCart.contains(dish)) {
-                                  dish.quantity++;
-                                } else {
-                                  Repo.repoCart.add(dish);
-                                }
+                                BlocProvider.of<CartBloc>(context).add(AddOrIncrementEvent(dish));
                                 ScaffoldMessenger.of(context)
                                     .removeCurrentSnackBar();
-                                ScaffoldMessenger.of(context)
-                                    .showSnackBar(simpleSnackBar("Блюдо успешно добавлено в корзину!"));
+                                ScaffoldMessenger.of(context).showSnackBar(
+                                    simpleSnackBar(
+                                        "Блюдо успешно добавлено в корзину!"));
                               },
                               child: Container(
                                 height: ResponsiveSize.responsiveHeight(

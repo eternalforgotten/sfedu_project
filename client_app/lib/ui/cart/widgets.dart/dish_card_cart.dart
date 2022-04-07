@@ -32,7 +32,7 @@ class DishCardCart extends StatelessWidget {
       ),
       child: Stack(
         alignment: Alignment.centerLeft,
-        overflow: Overflow.visible,
+        clipBehavior: Clip.none,
         children: <Widget>[
           Container(
             width: ResponsiveSize.responsiveWidth(309, context),
