@@ -4,3 +4,9 @@ part of 'dish_bloc.dart';
 abstract class DishEvent {}
 
 class FetchEvent extends DishEvent{}
+
+class ChangedCategoryEvent extends DishEvent {
+  final DishCategoryName categoryName;
+
+  ChangedCategoryEvent(this.categoryName);
+}

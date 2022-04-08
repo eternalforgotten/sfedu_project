@@ -1,21 +1,17 @@
 import 'dart:io';
 
-import 'package:cached_network_image/cached_network_image.dart';
 import 'package:client_app/business_logic/dish_bloc/dish_bloc.dart';
-import 'package:client_app/classes/dish.dart';
-import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:client_app/classes/dish_category.dart';
 import 'package:client_app/responsive_size.dart';
 import 'package:client_app/ui/main_menu_page/widgets/dish_card.dart';
 import 'package:client_app/ui/main_menu_page/widgets/name_block.dart';
-import 'package:client_app/ui/main_menu_page/widgets/search.dart';
 import 'package:client_app/ui/main_menu_page/widgets/titles_list.dart';
 import 'package:client_app/ui/main_menu_page/widgets/upper_icons.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:pull_to_refresh/pull_to_refresh.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
+import 'package:pull_to_refresh/pull_to_refresh.dart';
 
 class MainMenuPage extends StatefulWidget {
   @override
@@ -24,20 +20,26 @@ class MainMenuPage extends StatefulWidget {
 
 class _MainMenuPageState extends State<MainMenuPage> {
   List<DishCategory> _categories = [
-    DishCategory(icon: FontAwesomeIcons.exclamation, name: "Новинки"),
-    DishCategory(icon: FontAwesomeIcons.hamburger, name: "Гамбургеры"),
-    DishCategory(icon: FontAwesomeIcons.pepperHot, name: "Острое"),
-    DishCategory(icon: FontAwesomeIcons.candyCane, name: "Десерты"),
-    DishCategory(icon: FontAwesomeIcons.child, name: "Детское меню"),
-    DishCategory(icon: FontAwesomeIcons.coffee, name: "Напитки"),
-    DishCategory(icon: FontAwesomeIcons.fish, name: "Рыба"),
+    DishCategory(
+        icon: FontAwesomeIcons.exclamation, categoryName: DishCategoryName.all),
+    DishCategory(
+        icon: FontAwesomeIcons.hamburger,
+        categoryName: DishCategoryName.burgers),
+    DishCategory(
+        icon: Icons.soup_kitchen, categoryName: DishCategoryName.mainCourse),
+    DishCategory(
+        icon: Icons.food_bank, categoryName: DishCategoryName.secondCourse),
+    DishCategory(
+        icon: FontAwesomeIcons.coffee, categoryName: DishCategoryName.drinks),
+    DishCategory(
+        icon: FontAwesomeIcons.birthdayCake,
+        categoryName: DishCategoryName.desserts),
   ];
-
   int _selectedIndex = 0;
   void _tapHandler(int index) {
-    setState(() {
-      _selectedIndex = index;
-    });
+    _selectedIndex = index;
+    BlocProvider.of<DishBloc>(context)
+        .add(ChangedCategoryEvent(DishCategoryName.values[index]));
   }
 
   @override
@@ -81,7 +83,7 @@ class _MainMenuPageState extends State<MainMenuPage> {
                           backgroundColor: Colors.white,
                           floating: true,
                           expandedHeight:
-                              ResponsiveSize.responsiveHeight(315, context),
+                              ResponsiveSize.responsiveHeight(270, context),
                           flexibleSpace: FlexibleSpaceBar(
                             background: Column(
                               children: [
@@ -94,15 +96,19 @@ class _MainMenuPageState extends State<MainMenuPage> {
                                   height: ResponsiveSize.responsiveHeight(
                                       33, context),
                                 ),
-                                const Search(),
                                 SizedBox(
                                   height: ResponsiveSize.responsiveHeight(
                                       17, context),
                                 ),
-                                TitlesList(
-                                  currentIndex: _selectedIndex,
-                                  itemTapped: _tapHandler,
-                                  items: _categories,
+                                BlocBuilder<DishBloc, DishState>(
+                                  buildWhen: (prev, curr) => curr is FetchState,
+                                  builder: (context, state) {
+                                    return TitlesList(
+                                      currentIndex: _selectedIndex,
+                                      itemTapped: _tapHandler,
+                                      items: _categories,
+                                    );
+                                  },
                                 ),
                               ],
                             ),
@@ -137,31 +143,29 @@ class _MainMenuPageState extends State<MainMenuPage> {
                                           )
                                           .toList()
                                       : [
-                                          SliverPadding(
+                                          Padding(
                                             padding: EdgeInsets.only(
                                               top: ResponsiveSize
                                                   .responsiveHeight(
                                                       50, context),
                                             ),
-                                            sliver: SliverToBoxAdapter(
-                                              child: Center(
-                                                child: Text(
-                                                  "Ничего не найдено",
-                                                  style: TextStyle(
-                                                    color: Theme.of(context)
-                                                        .textTheme
-                                                        .bodyText1
-                                                        .color,
-                                                    fontFamily:
-                                                        Theme.of(context)
-                                                            .textTheme
-                                                            .bodyText1
-                                                            .fontFamily,
-                                                    fontSize: ResponsiveSize
-                                                        .responsiveHeight(
-                                                      18,
-                                                      context,
-                                                    ),
+                                            child: Center(
+                                              child: Text(
+                                                "Ничего не найдено",
+                                                style: TextStyle(
+                                                  color: Theme.of(context)
+                                                      .textTheme
+                                                      .bodyText1
+                                                      .color,
+                                                  fontFamily:
+                                                      Theme.of(context)
+                                                          .textTheme
+                                                          .bodyText1
+                                                          .fontFamily,
+                                                  fontSize: ResponsiveSize
+                                                      .responsiveHeight(
+                                                    18,
+                                                    context,
                                                   ),
                                                 ),
                                               ),
