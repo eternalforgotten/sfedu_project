@@ -3,9 +3,9 @@ import 'package:client_app/classes/dish_category.dart';
 
 class Dish {
   final String id;
-  final String name;
-  final String subName;
-  final String price;
+  String name;
+  String subName;
+  String price;
   CachedNetworkImageProvider image;
   int quantity = 1;
   final String description;

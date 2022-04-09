@@ -9,6 +9,8 @@ class IncrementEvent extends CartEvent {
   IncrementEvent(this.dish);
 }
 
+class CartChangedEvent extends CartEvent {}
+
 class DecrementEvent extends CartEvent {
   final Dish dish;
 

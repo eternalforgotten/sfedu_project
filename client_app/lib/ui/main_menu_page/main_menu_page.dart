@@ -1,5 +1,7 @@
+import 'dart:async';
 import 'dart:io';
 
+import 'package:client_app/business_logic/cart_bloc/cart_bloc.dart';
 import 'package:client_app/business_logic/dish_bloc/dish_bloc.dart';
 import 'package:client_app/classes/dish_category.dart';
 import 'package:client_app/responsive_size.dart';
@@ -7,6 +9,7 @@ import 'package:client_app/ui/main_menu_page/widgets/dish_card.dart';
 import 'package:client_app/ui/main_menu_page/widgets/name_block.dart';
 import 'package:client_app/ui/main_menu_page/widgets/titles_list.dart';
 import 'package:client_app/ui/main_menu_page/widgets/upper_icons.dart';
+import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
@@ -40,6 +43,21 @@ class _MainMenuPageState extends State<MainMenuPage> {
     _selectedIndex = index;
     BlocProvider.of<DishBloc>(context)
         .add(ChangedCategoryEvent(DishCategoryName.values[index]));
+  }
+  StreamSubscription streamSubscription;
+  @override
+  void initState() {
+    streamSubscription = FirebaseFirestore.instance.collection('dishes').snapshots().listen((event) {
+      BlocProvider.of<DishBloc>(context, listen: false).add(FetchEvent());
+      BlocProvider.of<CartBloc>(context, listen: false).add(CartChangedEvent());
+    });
+    // TODO: implement initState
+    super.initState();
+  }
+  @override
+  void dispose() {
+    streamSubscription.cancel();
+    super.dispose();
   }
 
   @override
@@ -157,11 +175,10 @@ class _MainMenuPageState extends State<MainMenuPage> {
                                                       .textTheme
                                                       .bodyText1
                                                       .color,
-                                                  fontFamily:
-                                                      Theme.of(context)
-                                                          .textTheme
-                                                          .bodyText1
-                                                          .fontFamily,
+                                                  fontFamily: Theme.of(context)
+                                                      .textTheme
+                                                      .bodyText1
+                                                      .fontFamily,
                                                   fontSize: ResponsiveSize
                                                       .responsiveHeight(
                                                     18,

@@ -1,13 +1,36 @@
+import 'dart:async';
+
 import 'package:client_app/added_dish_snackbar.dart';
 import 'package:client_app/business_logic/cart_bloc/cart_bloc.dart';
-import 'package:client_app/repos/repo.dart';
+import 'package:client_app/business_logic/dish_bloc/dish_bloc.dart';
 import 'package:client_app/responsive_size.dart';
 import 'package:client_app/ui/order_verification/verification_number_page/verification_number_page.dart';
+import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:google_fonts/google_fonts.dart';
 
-class Navbar extends StatelessWidget {
+class Navbar extends StatefulWidget {
+  @override
+  State<Navbar> createState() => _NavbarState();
+}
+
+class _NavbarState extends State<Navbar> {
+  StreamSubscription streamSubscription;
+  @override
+  void initState() {
+    streamSubscription = FirebaseFirestore.instance.collection('dishes').snapshots().listen((event) {
+      BlocProvider.of<DishBloc>(context, listen: false).add(FetchEvent());
+      BlocProvider.of<CartBloc>(context, listen: false).add(CartChangedEvent());
+    });
+    // TODO: implement initState
+    super.initState();
+  }
+  @override
+  void dispose() {
+    streamSubscription.cancel();
+    super.dispose();
+  }
   @override
   Widget build(BuildContext context) {
     return Container(

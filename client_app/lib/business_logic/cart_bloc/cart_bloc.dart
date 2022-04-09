@@ -1,6 +1,7 @@
 import 'package:bloc/bloc.dart';
 import 'package:client_app/classes/dish.dart';
 import 'package:client_app/repos/repo.dart';
+import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:meta/meta.dart';
 
 part 'cart_event.dart';
@@ -13,6 +14,17 @@ class CartBloc extends Bloc<CartEvent, CartState> {
     on<AddOrIncrementEvent>(_onAdd);
     on<RemoveEvent>(_onRemove);
     on<ClearEvent>(_onClear);
+    on<CartChangedEvent>(_onChanged);
+  }
+  Future<void> _onChanged(CartChangedEvent event, Emitter emit) async {
+    List<Dish> dishes = [];
+    var rawDishes = await FirebaseFirestore.instance.collection('dishes').get();
+    rawDishes.docs.forEach((snap) {
+      final dish = Dish.fromJson(snap.data(), snap.id);
+      dishes.add(dish);
+    });
+    cart.updateCart(dishes);
+    emit(CartChangedState(recalculate()));
   }
 
   void _onDecrement(DecrementEvent event, Emitter emit){

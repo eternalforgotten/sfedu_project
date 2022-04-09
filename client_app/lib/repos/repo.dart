@@ -4,7 +4,14 @@ import '../classes/dish.dart';
 
 class CartRepository{
   List<Dish> _repoCart = [];
-
+  void updateCart(List<Dish> dishes){
+    _repoCart.forEach((element) {
+      var dish = dishes.firstWhere((newDish) => newDish.id == element.id);
+      element.price = dish.price;
+      element.subName = dish.subName;
+      element.name = dish.name;
+    });
+  }
   void decrement(String id){
     final dish = _repoCart.firstWhere((element) => element.id == id);
     dish.quantity--;
@@ -14,7 +21,14 @@ class CartRepository{
     dish.quantity++;
   }
   void add(Dish dish){
-    if (_repoCart.contains(dish)){
+    bool contains = false;
+    for (int i = 0; i < _repoCart.length; i++){
+      if (_repoCart[i].id == dish.id){
+        contains = true;
+        break;
+      }
+    }
+    if (contains){
       _increment(dish.id);
     }
     else {

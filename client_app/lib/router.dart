@@ -11,10 +11,7 @@ Route onGenerateRoute(RouteSettings settings) {
   switch (settings.name) {
     case '/':
       return MaterialPageRoute(builder: (_) {
-        return BlocProvider(
-          create: (context) => DishBloc(FirebaseFirestore.instance)..add(FetchEvent()),
-          child: MainMenuPage(),
-        );
+        return MainMenuPage();
       });
     case '/cart':
       return MaterialPageRoute(builder: (_) {

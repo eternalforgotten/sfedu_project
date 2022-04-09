@@ -1,4 +1,5 @@
 import 'package:client_app/business_logic/cart_bloc/cart_bloc.dart';
+import 'package:client_app/business_logic/dish_bloc/dish_bloc.dart';
 import 'package:client_app/repos/repo.dart';
 import 'package:client_app/router.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
@@ -18,8 +19,18 @@ class MyApp extends StatelessWidget {
   // This widget is the root of your application.
   @override
   Widget build(BuildContext context) {
-    return BlocProvider(
-      create: (context) => CartBloc(cartRepo),
+    return MultiBlocProvider(
+      providers: [
+        BlocProvider(
+          create: (_) => DishBloc(FirebaseFirestore.instance)
+            ..add(
+              FetchEvent(),
+            ),
+        ),
+        BlocProvider(
+          create: (context) => CartBloc(cartRepo),
+        ),
+      ],
       child: MaterialApp(
         title: 'MealTime',
         theme: ThemeData(
