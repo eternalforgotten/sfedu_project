@@ -1,9 +1,8 @@
+import 'package:cached_network_image/cached_network_image.dart';
 import 'package:client_app/added_dish_snackbar.dart';
 import 'package:client_app/business_logic/cart_bloc/cart_bloc.dart';
 import 'package:client_app/classes/dish.dart';
-import 'package:client_app/repos/repo.dart';
 import 'package:client_app/responsive_size.dart';
-import 'package:client_app/ui/item_page/item_page.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:google_fonts/google_fonts.dart';
@@ -159,7 +158,7 @@ class DishCard extends StatelessWidget {
                   child: Image(
                     fit: BoxFit.cover,
                     image: ResizeImage(
-                      dish.image,
+                      CachedNetworkImageProvider(dish.image),
                       width:
                           ResponsiveSize.responsiveWidth(200, context).round(),
                     ),

@@ -10,7 +10,7 @@ class DishCardCart extends StatelessWidget {
   final int count; //Кол-во в заказе на данный момент
   final Function pressUp; // Плюсик
   final Function pressDown; //Минусик
-  final CachedNetworkImageProvider image;
+  final String image;
   //final Function pressDel;
 
   const DishCardCart(
@@ -162,11 +162,12 @@ class DishCardCart extends StatelessWidget {
             left: ResponsiveSize.responsiveWidth(-30.4, context),
             child: ClipOval(
               child: Container(
-                width: ResponsiveSize.responsiveWidth(76, context),
+                width: ResponsiveSize.responsiveHeight(76, context),
                 height: ResponsiveSize.responsiveHeight(76, context),
                 child: Image(
+                  fit: BoxFit.cover,
                   image: ResizeImage(
-                    image,
+                    CachedNetworkImageProvider(image),
                     width: ResponsiveSize.responsiveWidth(200, context).round(),
                   ),
                 ),

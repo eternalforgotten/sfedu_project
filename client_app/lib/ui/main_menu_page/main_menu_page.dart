@@ -4,6 +4,7 @@ import 'dart:io';
 import 'package:client_app/business_logic/cart_bloc/cart_bloc.dart';
 import 'package:client_app/business_logic/dish_bloc/dish_bloc.dart';
 import 'package:client_app/classes/dish_category.dart';
+import 'package:client_app/main.dart';
 import 'package:client_app/responsive_size.dart';
 import 'package:client_app/ui/main_menu_page/widgets/dish_card.dart';
 import 'package:client_app/ui/main_menu_page/widgets/name_block.dart';
@@ -44,16 +45,25 @@ class _MainMenuPageState extends State<MainMenuPage> {
     BlocProvider.of<DishBloc>(context)
         .add(ChangedCategoryEvent(DishCategoryName.values[index]));
   }
+
   StreamSubscription streamSubscription;
+  
+
   @override
-  void initState() {
-    streamSubscription = FirebaseFirestore.instance.collection('dishes').snapshots().listen((event) {
-      BlocProvider.of<DishBloc>(context, listen: false).add(FetchEvent());
-      BlocProvider.of<CartBloc>(context, listen: false).add(CartChangedEvent());
+  void didChangeDependencies() {
+    streamSubscription = FirebaseFirestore.instance
+        .collection('dishes')
+        .snapshots()
+        .listen((event) {
+      if (!FIRST) {
+        BlocProvider.of<DishBloc>(context, listen: false).add(FetchEvent());
+        BlocProvider.of<CartBloc>(context, listen: false)
+            .add(CartChangedEvent());
+      }
     });
-    // TODO: implement initState
-    super.initState();
+    super.didChangeDependencies();
   }
+
   @override
   void dispose() {
     streamSubscription.cancel();

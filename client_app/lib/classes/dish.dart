@@ -6,7 +6,7 @@ class Dish {
   String name;
   String subName;
   String price;
-  CachedNetworkImageProvider image;
+  String image;
   int quantity = 1;
   final String description;
   final DishCategoryName category;
@@ -24,7 +24,7 @@ class Dish {
   Dish.fromJson(Map<String, dynamic> json, String firebaseId)
       : id = firebaseId,
         category = DishCategory.nameToCategory(json['category']),
-        image = CachedNetworkImageProvider(json['image_url']),
+        image = json['image_url'],
         description = json['description'],
         name = json['name'],
         price = json['price'].toString(),

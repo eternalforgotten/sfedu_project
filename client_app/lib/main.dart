@@ -12,7 +12,7 @@ void main() async {
   await Firebase.initializeApp();
   runApp(MyApp());
 }
-
+bool FIRST = true;
 class MyApp extends StatelessWidget {
   final firebase = FirebaseFirestore.instance;
   final cartRepo = CartRepository();

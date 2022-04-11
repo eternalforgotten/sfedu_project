@@ -25,13 +25,14 @@ dependencies:
     sdk: flutter
   pull_to_refresh: ^2.0.0
   flutter_bloc: ^8.0.1
-  google_fonts: ^1.1.0
+  google_fonts: ^2.3.1
   font_awesome_flutter: ^9.0.0
   cached_network_image: ^2.2.0
   mask_text_input_formatter: ^1.0.6
   timer_count_down: ^1.0.4
   cloud_firestore: 
   pin_code_fields: ^7.3.0
+  firebase_storage: ^10.2.11
   
 
 

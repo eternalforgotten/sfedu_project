@@ -5,7 +5,7 @@ import 'package:google_fonts/google_fonts.dart';
 
 class DishCardPreview extends StatelessWidget {
   final String price;
-  final CachedNetworkImageProvider image;
+  final String image;
   DishCardPreview({this.price, this.image});
 
   @override
@@ -29,7 +29,7 @@ class DishCardPreview extends StatelessWidget {
               ),
               image: DecorationImage(
                 fit: BoxFit.cover,
-                image: image,
+                image: CachedNetworkImageProvider(image),
               ),
             ),
           ),
