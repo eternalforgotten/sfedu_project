@@ -47,7 +47,6 @@ class _MainMenuPageState extends State<MainMenuPage> {
   }
 
   StreamSubscription streamSubscription;
-  
 
   @override
   void didChangeDependencies() {
@@ -78,142 +77,170 @@ class _MainMenuPageState extends State<MainMenuPage> {
       onTap: () {
         FocusScope.of(context).unfocus();
       },
-      child: Scaffold(
-        body: Container(
-          color: Colors.white,
-          child: SafeArea(
-            child: Column(
-              children: [
-                UpperIcons(),
-                Expanded(
-                  child: SmartRefresher(
-                    header: Platform.isAndroid
-                        ? MaterialClassicHeader()
-                        : ClassicHeader(
-                            refreshingIcon: CupertinoActivityIndicator(),
-                            refreshingText: '',
-                            releaseIcon: CupertinoActivityIndicator(),
-                            releaseText: '',
-                            completeIcon: CupertinoActivityIndicator(),
-                            completeText: '',
-                            idleIcon: null,
-                            idleText: '',
-                          ),
-                    controller: _refreshController,
-                    onRefresh: () {
-                      BlocProvider.of<DishBloc>(context).add(FetchEvent());
-                      _refreshController.refreshCompleted();
-                    },
-                    child: CustomScrollView(
-                      physics: BouncingScrollPhysics(),
-                      slivers: [
-                        SliverAppBar(
-                          backgroundColor: Colors.white,
-                          floating: true,
-                          expandedHeight:
-                              ResponsiveSize.responsiveHeight(270, context),
-                          flexibleSpace: FlexibleSpaceBar(
-                            background: Column(
-                              children: [
-                                SizedBox(
-                                  height: ResponsiveSize.responsiveHeight(
-                                      25, context),
-                                ),
-                                const NameBlock(),
-                                SizedBox(
-                                  height: ResponsiveSize.responsiveHeight(
-                                      33, context),
-                                ),
-                                SizedBox(
-                                  height: ResponsiveSize.responsiveHeight(
-                                      17, context),
-                                ),
-                                BlocBuilder<DishBloc, DishState>(
-                                  buildWhen: (prev, curr) => curr is FetchState,
-                                  builder: (context, state) {
-                                    return TitlesList(
-                                      currentIndex: _selectedIndex,
-                                      itemTapped: _tapHandler,
-                                      items: _categories,
-                                    );
-                                  },
-                                ),
-                              ],
+      child: SafeArea(
+        child: Scaffold(
+          body: Container(
+            color: Colors.white,
+            child: SafeArea(
+              child: Column(
+                children: [
+                  UpperIcons(),
+                  Expanded(
+                    child: SmartRefresher(
+                      header: Platform.isAndroid
+                          ? MaterialClassicHeader()
+                          : ClassicHeader(
+                              refreshingIcon: CupertinoActivityIndicator(),
+                              refreshingText: '',
+                              releaseIcon: CupertinoActivityIndicator(),
+                              releaseText: '',
+                              completeIcon: CupertinoActivityIndicator(),
+                              completeText: '',
+                              idleIcon: null,
+                              idleText: '',
+                            ),
+                      controller: _refreshController,
+                      onRefresh: () {
+                        BlocProvider.of<DishBloc>(context).add(FetchEvent());
+                        _refreshController.refreshCompleted();
+                      },
+                      child: CustomScrollView(
+                        physics: BouncingScrollPhysics(),
+                        slivers: [
+                          SliverAppBar(
+                            backgroundColor: Colors.white,
+                            floating: true,
+                            expandedHeight:
+                                ResponsiveSize.responsiveHeight(270, context),
+                            flexibleSpace: FlexibleSpaceBar(
+                              background: Column(
+                                children: [
+                                  SizedBox(
+                                    height: ResponsiveSize.responsiveHeight(
+                                        25, context),
+                                  ),
+                                  const NameBlock(),
+                                  SizedBox(
+                                    height: ResponsiveSize.responsiveHeight(
+                                        33, context),
+                                  ),
+                                  SizedBox(
+                                    height: ResponsiveSize.responsiveHeight(
+                                        17, context),
+                                  ),
+                                  BlocBuilder<DishBloc, DishState>(
+                                    buildWhen: (prev, curr) => curr is FetchState,
+                                    builder: (context, state) {
+                                      return TitlesList(
+                                        currentIndex: _selectedIndex,
+                                        itemTapped: _tapHandler,
+                                        items: _categories,
+                                      );
+                                    },
+                                  ),
+                                ],
+                              ),
                             ),
                           ),
-                        ),
-                        BlocBuilder<DishBloc, DishState>(
-                          builder: (context, state) {
-                            if (state is FetchLoadingState) {
-                              return SliverToBoxAdapter(
-                                child: Center(
-                                  child: CircularProgressIndicator(),
-                                ),
-                              );
-                            } else if (state is FetchState) {
-                              return SliverList(
-                                delegate: SliverChildListDelegate.fixed(
-                                  state.dishes.length > 0
-                                      ? state.dishes
-                                          .map(
-                                            (e) => Column(
-                                              children: [
-                                                DishCard(
-                                                  dish: e,
-                                                ),
-                                                SizedBox(
-                                                  height: ResponsiveSize
-                                                      .responsiveHeight(
-                                                          16, context),
-                                                ),
-                                              ],
-                                            ),
-                                          )
-                                          .toList()
-                                      : [
-                                          Padding(
-                                            padding: EdgeInsets.only(
-                                              top: ResponsiveSize
-                                                  .responsiveHeight(
-                                                      50, context),
-                                            ),
-                                            child: Center(
-                                              child: Text(
-                                                "Ничего не найдено",
-                                                style: TextStyle(
-                                                  color: Theme.of(context)
-                                                      .textTheme
-                                                      .bodyText1
-                                                      .color,
-                                                  fontFamily: Theme.of(context)
-                                                      .textTheme
-                                                      .bodyText1
-                                                      .fontFamily,
-                                                  fontSize: ResponsiveSize
-                                                      .responsiveHeight(
-                                                    18,
-                                                    context,
+                          BlocBuilder<DishBloc, DishState>(
+                            builder: (context, state) {
+                              if (state is ErrorState) {
+                                return SliverToBoxAdapter(
+                                  child: Center(
+                                    child: Text(
+                                      state.message,
+                                      style: TextStyle(
+                                        color: Theme.of(context)
+                                            .textTheme
+                                            .bodyText1
+                                            .color,
+                                        fontFamily: Theme.of(context)
+                                            .textTheme
+                                            .bodyText1
+                                            .fontFamily,
+                                        fontSize: ResponsiveSize.responsiveHeight(
+                                          15,
+                                          context,
+                                        ),
+                                      ),
+                                    ),
+                                  ),
+                                );
+                              } else if (state is FetchLoadingState) {
+                                return SliverToBoxAdapter(
+                                  child: Container(
+                                    alignment: Alignment.center,
+                                    padding: EdgeInsets.only(top: ResponsiveSize.responsiveHeight(20, context)),
+                                    child: CircularProgressIndicator.adaptive(
+                                      valueColor: AlwaysStoppedAnimation<Color>(Theme.of(context).accentColor),
+                                    ),
+                                  ),
+                                );
+                              } else if (state is FetchState) {
+                                return SliverList(
+                                  delegate: SliverChildListDelegate.fixed(
+                                    state.dishes.length > 0
+                                        ? state.dishes
+                                            .map(
+                                              (e) => Column(
+                                                children: [
+                                                  DishCard(
+                                                    dish: e,
+                                                  ),
+                                                  SizedBox(
+                                                    height: ResponsiveSize
+                                                        .responsiveHeight(
+                                                            16, context),
+                                                  ),
+                                                ],
+                                              ),
+                                            )
+                                            .toList()
+                                        : [
+                                            Padding(
+                                              padding: EdgeInsets.only(
+                                                top: ResponsiveSize
+                                                    .responsiveHeight(
+                                                        50, context),
+                                              ),
+                                              child: Center(
+                                                child: Text(
+                                                  "Ничего не найдено",
+                                                  style: TextStyle(
+                                                    color: Theme.of(context)
+                                                        .textTheme
+                                                        .bodyText1
+                                                        .color,
+                                                    fontFamily: Theme.of(context)
+                                                        .textTheme
+                                                        .bodyText1
+                                                        .fontFamily,
+                                                    fontSize: ResponsiveSize
+                                                        .responsiveHeight(
+                                                      18,
+                                                      context,
+                                                    ),
                                                   ),
                                                 ),
                                               ),
-                                            ),
-                                          )
-                                        ],
+                                            )
+                                          ],
+                                  ),
+                                );
+                              }
+                              return SliverToBoxAdapter(
+                                child: Center(
+                                  child: Text('Что-то не так'),
                                 ),
                               );
-                            }
-                            return SliverToBoxAdapter(
-                              child: Center(
-                                child: Text('Упс'),
-                              ),
-                            );
-                          },
-                        ),
-                      ],
+                            },
+                          ),
+                        ],
+                      ),
                     ),
                   ),
-                ),
-              ],
+                ],
+              ),
             ),
           ),
         ),

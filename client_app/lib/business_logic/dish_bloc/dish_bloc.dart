@@ -1,3 +1,4 @@
+import 'dart:async';
 import 'package:client_app/classes/dish.dart';
 import 'package:client_app/classes/dish_category.dart';
 import 'package:client_app/main.dart';

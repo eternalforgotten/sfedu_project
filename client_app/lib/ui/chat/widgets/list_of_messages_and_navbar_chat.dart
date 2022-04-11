@@ -1,8 +1,6 @@
 import 'package:client_app/ui/chat/widgets/chat_message.dart';
 import 'package:client_app/classes/message.dart';
 import 'package:client_app/responsive_size.dart';
-import 'package:flutter/cupertino.dart';
-import 'package:flutter/services.dart';
 import 'package:pull_to_refresh/pull_to_refresh.dart';
 import 'package:flutter/material.dart';
 
@@ -71,7 +69,7 @@ class _ListOfMessagesAndNavbarChatState
                   if (mode == LoadStatus.idle) {
                     body = Text("");
                   } else if (mode == LoadStatus.loading) {
-                    body = CircularProgressIndicator(
+                    body = CircularProgressIndicator.adaptive(
                       backgroundColor: Theme.of(context).accentColor,
                       valueColor: AlwaysStoppedAnimation<Color>(
                           Theme.of(context).primaryColor),

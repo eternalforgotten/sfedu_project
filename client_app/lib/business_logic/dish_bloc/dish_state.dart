@@ -11,3 +11,9 @@ class FetchState extends DishState {
 }
 
 class FetchLoadingState extends DishState {}
+
+class ErrorState extends DishState {
+  final String message;
+
+  ErrorState(this.message);
+}
