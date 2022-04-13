@@ -1,7 +1,6 @@
 import 'package:client_app/classes/message.dart';
 import 'package:client_app/responsive_size.dart';
 import 'package:flutter/material.dart';
-import 'package:google_fonts/google_fonts.dart';
 
 class ChatMessage extends StatelessWidget {
   final Message message;
@@ -91,86 +90,6 @@ class ChatMessage extends StatelessWidget {
       );
     }
 
-    Widget buildBillMessage() {
-      return Container(
-        padding: EdgeInsets.only(
-          right: ResponsiveSize.responsiveWidth(6, context),
-          left: ResponsiveSize.responsiveWidth(9, context),
-          top: ResponsiveSize.responsiveHeight(4, context),
-          bottom: ResponsiveSize.responsiveHeight(5, context),
-        ),
-        constraints: BoxConstraints(
-          maxWidth: ResponsiveSize.responsiveWidth(250, context),
-        ),
-        decoration: BoxDecoration(
-          color: Theme.of(context).cardColor,
-          borderRadius: BorderRadius.circular(10),
-        ),
-        child: Column(
-          crossAxisAlignment: CrossAxisAlignment.start,
-          mainAxisAlignment: MainAxisAlignment.spaceBetween,
-          children: [
-            RichText(
-              text: TextSpan(children: [
-                TextSpan(
-                  text: "Счет на оплату: ${message.price.split('.').first} ",
-                  style: TextStyle(
-                    color: Theme.of(context).textTheme.bodyText1.color,
-                    fontFamily:
-                        Theme.of(context).textTheme.bodyText1.fontFamily,
-                    fontSize: ResponsiveSize.responsiveHeight(18, context),
-                  ),
-                ),
-                TextSpan(
-                  text: "₽",
-                  style: GoogleFonts.roboto(
-                    color: Theme.of(context).textTheme.bodyText1.color,
-                    fontSize: ResponsiveSize.responsiveHeight(18, context),
-                  ),
-                ),
-              ]),
-            ),
-            SizedBox(
-              height: ResponsiveSize.responsiveHeight(10, context),
-            ),
-            Row(
-              crossAxisAlignment: CrossAxisAlignment.end,
-              mainAxisAlignment: MainAxisAlignment.spaceBetween,
-              children: [
-                Container(
-                  width: ResponsiveSize.responsiveWidth(185, context),
-                  child: RaisedButton(
-                    highlightColor: Colors.white,
-                    splashColor: Colors.white,
-                    color: Colors.white,
-                    shape: RoundedRectangleBorder(
-                      borderRadius: BorderRadius.circular(5),
-                      side: BorderSide(
-                        color: Color(0xFFA1E8B1),
-                        width: 2,
-                      ),
-                    ),
-                    onPressed: () {},
-                    child: Text(
-                      "Оплатить",
-                      style: TextStyle(
-                        color: Color(0xFFA1E8B1),
-                        fontSize: ResponsiveSize.responsiveHeight(18, context),
-                        fontFamily:
-                            Theme.of(context).textTheme.bodyText1.fontFamily,
-                        fontWeight: FontWeight.w600,
-                      ),
-                    ),
-                  ),
-                ),
-                _getTime(),
-              ],
-            )
-          ],
-        ),
-      );
-    }
-
     Widget buildTextOrderMessage() {
       return Container(
         padding: EdgeInsets.only(
@@ -212,85 +131,6 @@ class ChatMessage extends StatelessWidget {
       );
     }
 
-    Widget buildPictureMessage() {
-      return GestureDetector(
-        //если сообщение - картинка
-        onTap: () {
-          FocusScope.of(context).unfocus();
-          Navigator.of(context).push(
-            MaterialPageRoute(
-              builder: (_) => GestureDetector(
-                onTap: () {
-                  Navigator.of(context).pop();
-                },
-                child: Hero(
-                  tag: message.content + message.time.toString(),
-                  child: Card(
-                    child: Image.network(
-                      message.content,
-                    ),
-                  ),
-                ),
-              ),
-            ),
-          );
-        },
-        child: Stack(
-          alignment: Alignment.bottomRight,
-          children: [
-            Hero(
-              tag: message.content + message.time.toString(),
-              child: Container(
-                height: ResponsiveSize.responsiveHeight(210, context),
-                width: ResponsiveSize.responsiveWidth(265, context),
-                decoration: BoxDecoration(
-                  color: Theme.of(context).cardColor,
-                  borderRadius: BorderRadius.all(
-                    Radius.circular(10),
-                  ),
-                  image: DecorationImage(
-                    fit: BoxFit.cover,
-                    image: ResizeImage(
-                      NetworkImage(message.content),
-                      width:
-                          ResponsiveSize.responsiveWidth(400, context).round(),
-                    ),
-                  ),
-                ),
-              ),
-            ),
-            Container(
-              padding: EdgeInsets.only(
-                right: ResponsiveSize.responsiveWidth(7, context),
-                bottom: ResponsiveSize.responsiveHeight(1, context),
-              ),
-              margin: EdgeInsets.only(
-                right: ResponsiveSize.responsiveWidth(10, context),
-                bottom: ResponsiveSize.responsiveHeight(10, context),
-              ),
-              width: ResponsiveSize.responsiveWidth(40, context),
-              height: ResponsiveSize.responsiveHeight(20, context),
-              decoration: BoxDecoration(
-                color: Colors.black45,
-                borderRadius: BorderRadius.circular(5),
-              ),
-              child: _getTime(flag: true),
-            ),
-          ],
-        ),
-      );
-    }
-
-    Widget getTypedMessage({TypeMessage type}) {
-      if (type == TypeMessage.bill) {
-        return buildBillMessage();
-      } else if (type == TypeMessage.text || type == TypeMessage.order) {
-        return buildTextOrderMessage();
-      } else {
-        return buildPictureMessage();
-      }
-    }
-
     Widget messageWidget() {
       return Container(
         margin: EdgeInsets.only(
@@ -310,7 +150,7 @@ class ChatMessage extends StatelessWidget {
                     child: CircleAvatar(
                       radius: ResponsiveSize.responsiveHeight(25, context),
                       backgroundImage: ResizeImage(
-                        AssetImage("assets/images/logo_2.jpg"),
+                        AssetImage("assets/mealtime.png"),
                         height:
                             (ResponsiveSize.responsiveHeight(25, context) * 4)
                                 .ceil(),
@@ -330,7 +170,7 @@ class ChatMessage extends StatelessWidget {
                     ? ResponsiveSize.responsiveWidth(5, context)
                     : 0,
               ),
-              child: getTypedMessage(type: message.type),
+              child: buildTextOrderMessage(),
             ),
           ],
         ),

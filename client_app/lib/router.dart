@@ -1,3 +1,4 @@
+import 'package:client_app/business_logic/chat_bloc/chat_bloc.dart';
 import 'package:client_app/business_logic/dish_bloc/dish_bloc.dart';
 import 'package:client_app/ui/cart/cart.dart';
 import 'package:client_app/ui/chat/chat.dart';
@@ -24,7 +25,13 @@ Route onGenerateRoute(RouteSettings settings) {
     case '/chat':
       return MaterialPageRoute(
         builder: (_) {
-          return Chat();
+          return BlocProvider(
+            create: (context) => ChatBloc()
+                ..add(
+                  FetchChatEvent('89184735828'),
+                ),
+            child: Chat(),
+          );
         },
       );
     default:

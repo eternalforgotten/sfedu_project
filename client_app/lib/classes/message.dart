@@ -1,32 +1,42 @@
+import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
 
 class Message {
   final DateTime time;
   final String sender;
-  final TypeMessage type;
   final String content;
-  final String price;
+  bool needDate;
 
-  const Message(
-      {@required this.time,
-      @required this.sender,
-      @required this.type,
-      @required this.content,
-      this.price = '0'});
+  Message({
+    @required this.time,
+    this.needDate = false,
+    @required this.sender,
+    @required this.content,
+  });
 
   void printMessage() {
     print('time is $time');
     print('sender is $sender');
-    print('type is $type');
     print('content is $content');
   }
-  
-}
 
-enum TypeMessage{
-  text, picture, order, temp, bill
-}
-extension ValueGetter on TypeMessage{
-  
-  int get typeIndex => this.index+ 1;
+  Message.fromJson(Map<String, dynamic> json)
+      : time = _dateTimeFromStamp(json),
+        sender = json['sender'],
+        content = json['content'],
+        needDate = json['need_date'];
+
+  static DateTime _dateTimeFromStamp(Map<String, dynamic> json) {
+    var timestamp = json['time'] as Timestamp;
+    return DateTime.parse(timestamp.toDate().toString());
+  }
+
+  Map<String, Object> toJson(){
+    return {
+      'sender': this.sender,
+      'content': this.content,
+      'need_date': this.needDate,
+      'time': Timestamp.fromDate(this.time),
+    };
+  }
 }

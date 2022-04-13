@@ -1,6 +1,9 @@
+import 'package:client_app/business_logic/chat_bloc/chat_bloc.dart';
 import 'package:client_app/ui/chat/widgets/chat_message.dart';
 import 'package:client_app/classes/message.dart';
 import 'package:client_app/responsive_size.dart';
+import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:pull_to_refresh/pull_to_refresh.dart';
 import 'package:flutter/material.dart';
 
@@ -18,12 +21,6 @@ class _ListOfMessagesAndNavbarChatState
   RefreshController _refreshController = RefreshController();
 
   List<ChatMessage> _listOfMessages = [];
-  //Список всех сообщений-виджетов
-
-  bool historyLoad = false; // индикатор загрузки истории
-  bool shouldAdd(Message msg) {
-    return msg.sender != "System" && msg.type != TypeMessage.temp;
-  }
 
   bool needDate(Message msg, bool onMessage) {
     return onMessage
@@ -36,10 +33,10 @@ class _ListOfMessagesAndNavbarChatState
   void addMessage(String text, {bool onMessage = false}) {
     setState(() {
       var msg = Message(
-          time: DateTime.now(),
-          sender: "User",
-          type: TypeMessage.text,
-          content: text);
+        time: DateTime.now(),
+        sender: "User",
+        content: text,
+      );
       _listOfMessages.add(
         ChatMessage(
           message: msg,
@@ -60,9 +57,9 @@ class _ListOfMessagesAndNavbarChatState
             ),
             height: ResponsiveSize.responsiveHeight(576, context),
             child: SmartRefresher(
-              enablePullUp: true, //
+              enablePullUp: true,
               enablePullDown: false,
-              reverse: true, //
+              reverse: true,
               footer: CustomFooter(
                 builder: (context, mode) {
                   Widget body;
@@ -92,11 +89,36 @@ class _ListOfMessagesAndNavbarChatState
               onLoading: () async {
                 _refreshController.loadComplete();
               },
-              child: ListView.builder(
-                controller: _controller,
-                itemCount: _listOfMessages.length,
-                itemBuilder: (c, i) =>
-                    _listOfMessages[_listOfMessages.length - 1 - i],
+              child: StreamBuilder<DocumentSnapshot>(
+                stream: FirebaseFirestore.instance
+                    .collection('chats')
+                    .doc('89184735828')
+                    .snapshots(),
+                builder: (ctx, snap) {
+                  var hasData = snap.hasData;
+                  var data =
+                      hasData ? snap.data.data() as Map<String, Object> : null;
+                  return SingleChildScrollView(
+                    child: Column(
+                      mainAxisAlignment: MainAxisAlignment.end,
+                      children: [
+                        if (hasData)
+                          ...(data['messages'] as List<dynamic>)
+                              .map(
+                                (raw) => Message.fromJson(
+                                    raw as Map<String, Object>),
+                              )
+                              .map(
+                                (msg) => ChatMessage(
+                                  message: msg,
+                                  date: msg.needDate,
+                                ),
+                              )
+                              .toList(),
+                      ],
+                    ),
+                  );
+                },
               ),
             ),
           ),
@@ -134,12 +156,9 @@ class _ListOfMessagesAndNavbarChatState
               Container(
                 width: ResponsiveSize.responsiveWidth(230, context),
                 child: TextField(
-                  //поле для ввода сообщения
-                  // keyboardType: TextInputType.text,
                   textCapitalization: TextCapitalization.sentences,
                   minLines: 1,
                   maxLines: 4,
-
                   controller: textEditingController,
                   textInputAction: TextInputAction.newline,
                   style: TextStyle(
@@ -162,20 +181,17 @@ class _ListOfMessagesAndNavbarChatState
               GestureDetector(
                 //отправка сообщения
                 onTap: () {
-                  if (textEditingController.value.text.trim().isNotEmpty) {
-                    addMessage(textEditingController.value.text);
-                    textEditingController.text = "";
-                    WidgetsBinding.instance.addPostFrameCallback((_) {
-                      //говорим, что нужно вызвать функцию
-                      //после выполения метода build() - иначе не заработает
-                      setState(() {
-                        _controller.animateTo(
-                            0, //прокручиваем вниз до самого последнего сообщения
-                            duration: Duration(milliseconds: 200),
-                            curve: Curves.easeInCubic);
-                      });
-                    });
-                  }
+                  BlocProvider.of<ChatBloc>(context).add(
+                    SendMessageEvent(
+                      Message(
+                        content: textEditingController.text,
+                        sender: "User",
+                        time: DateTime.now(),
+                      ),
+                      '89184735828',
+                    ),
+                  );
+                  textEditingController.text = "";
                 },
                 child: Container(
                   width: ResponsiveSize.responsiveWidth(50, context),
