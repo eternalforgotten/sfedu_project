@@ -46,29 +46,6 @@ class _MainMenuPageState extends State<MainMenuPage> {
         .add(ChangedCategoryEvent(DishCategoryName.values[index]));
   }
 
-  StreamSubscription streamSubscription;
-
-  @override
-  void didChangeDependencies() {
-    streamSubscription = FirebaseFirestore.instance
-        .collection('dishes')
-        .snapshots()
-        .listen((event) {
-      if (!FIRST) {
-        BlocProvider.of<DishBloc>(context, listen: false).add(FetchEvent());
-        BlocProvider.of<CartBloc>(context, listen: false)
-            .add(CartChangedEvent());
-      }
-    });
-    super.didChangeDependencies();
-  }
-
-  @override
-  void dispose() {
-    streamSubscription.cancel();
-    super.dispose();
-  }
-
   @override
   Widget build(BuildContext context) {
     final RefreshController _refreshController =
@@ -129,7 +106,8 @@ class _MainMenuPageState extends State<MainMenuPage> {
                                         17, context),
                                   ),
                                   BlocBuilder<DishBloc, DishState>(
-                                    buildWhen: (prev, curr) => curr is FetchState,
+                                    buildWhen: (prev, curr) =>
+                                        curr is FetchState,
                                     builder: (context, state) {
                                       return TitlesList(
                                         currentIndex: _selectedIndex,
@@ -158,7 +136,8 @@ class _MainMenuPageState extends State<MainMenuPage> {
                                             .textTheme
                                             .bodyText1
                                             .fontFamily,
-                                        fontSize: ResponsiveSize.responsiveHeight(
+                                        fontSize:
+                                            ResponsiveSize.responsiveHeight(
                                           15,
                                           context,
                                         ),
@@ -170,9 +149,12 @@ class _MainMenuPageState extends State<MainMenuPage> {
                                 return SliverToBoxAdapter(
                                   child: Container(
                                     alignment: Alignment.center,
-                                    padding: EdgeInsets.only(top: ResponsiveSize.responsiveHeight(20, context)),
+                                    padding: EdgeInsets.only(
+                                        top: ResponsiveSize.responsiveHeight(
+                                            20, context)),
                                     child: CircularProgressIndicator.adaptive(
-                                      valueColor: AlwaysStoppedAnimation<Color>(Theme.of(context).accentColor),
+                                      valueColor: AlwaysStoppedAnimation<Color>(
+                                          Theme.of(context).accentColor),
                                     ),
                                   ),
                                 );
@@ -211,10 +193,11 @@ class _MainMenuPageState extends State<MainMenuPage> {
                                                         .textTheme
                                                         .bodyText1
                                                         .color,
-                                                    fontFamily: Theme.of(context)
-                                                        .textTheme
-                                                        .bodyText1
-                                                        .fontFamily,
+                                                    fontFamily:
+                                                        Theme.of(context)
+                                                            .textTheme
+                                                            .bodyText1
+                                                            .fontFamily,
                                                     fontSize: ResponsiveSize
                                                         .responsiveHeight(
                                                       18,

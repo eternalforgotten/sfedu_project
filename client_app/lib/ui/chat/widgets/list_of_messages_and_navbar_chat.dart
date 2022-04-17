@@ -19,33 +19,7 @@ class _ListOfMessagesAndNavbarChatState
   TextEditingController textEditingController = TextEditingController();
   ScrollController _controller = ScrollController();
   RefreshController _refreshController = RefreshController();
-
-  List<ChatMessage> _listOfMessages = [];
-
-  bool needDate(Message msg, bool onMessage) {
-    return onMessage
-        ? (_listOfMessages.isEmpty ||
-            msg.time.day != _listOfMessages.last.message.time.day)
-        : (_listOfMessages.isNotEmpty &&
-            msg.time.day != _listOfMessages.last.message.time.day);
-  }
-
-  void addMessage(String text, {bool onMessage = false}) {
-    setState(() {
-      var msg = Message(
-        time: DateTime.now(),
-        sender: "User",
-        content: text,
-      );
-      _listOfMessages.add(
-        ChatMessage(
-          message: msg,
-          date: needDate(msg, onMessage),
-        ),
-      );
-    });
-  }
-
+  bool _isMessageEmpty = true;
   @override
   Widget build(BuildContext context) {
     return Column(
@@ -96,26 +70,25 @@ class _ListOfMessagesAndNavbarChatState
                     .snapshots(),
                 builder: (ctx, snap) {
                   var hasData = snap.hasData;
-                  var data =
+                  var map =
                       hasData ? snap.data.data() as Map<String, Object> : null;
                   return SingleChildScrollView(
                     child: Column(
                       mainAxisAlignment: MainAxisAlignment.end,
-                      children: [
-                        if (hasData)
-                          ...(data['messages'] as List<dynamic>)
+                      children: hasData && map != null
+                          ? (map['messages'] as List<dynamic>)
                               .map(
                                 (raw) => Message.fromJson(
-                                    raw as Map<String, Object>),
+                                  raw as Map<String, Object>,
+                                ),
                               )
                               .map(
                                 (msg) => ChatMessage(
                                   message: msg,
-                                  date: msg.needDate,
                                 ),
                               )
-                              .toList(),
-                      ],
+                              .toList()
+                          : [],
                     ),
                   );
                 },
@@ -128,91 +101,107 @@ class _ListOfMessagesAndNavbarChatState
           padding: EdgeInsets.only(
             left: ResponsiveSize.responsiveWidth(10, context),
           ),
-          child: Row(
-            //навбвр чата - выбор картинки, текстовое поле, кнопка отправки ссообщения
-            mainAxisAlignment: MainAxisAlignment.spaceBetween,
-            children: <Widget>[
-              Container(
-                height: ResponsiveSize.responsiveHeight(40, context),
-                width: ResponsiveSize.responsiveHeight(40, context),
-                decoration: BoxDecoration(
-                  color: Theme.of(context).primaryColor,
-                  borderRadius: BorderRadius.all(
-                    Radius.circular(10),
-                  ),
-                ),
-                child: Center(
-                  child: GestureDetector(
-                    //отправка изображения
-                    onTap: () async {},
-                    child: Icon(
-                      Icons.image,
-                      color: Colors.white,
-                      size: ResponsiveSize.responsiveHeight(18, context),
-                    ),
-                  ),
-                ),
-              ),
-              Container(
-                width: ResponsiveSize.responsiveWidth(230, context),
-                child: TextField(
-                  textCapitalization: TextCapitalization.sentences,
-                  minLines: 1,
-                  maxLines: 4,
-                  controller: textEditingController,
-                  textInputAction: TextInputAction.newline,
-                  style: TextStyle(
-                    fontSize: 16.0,
-                    color: Colors.black,
-                  ),
-                  decoration: InputDecoration(
-                    hintText: 'Введите сообщение...',
-                    border: InputBorder.none,
-                    hintStyle: TextStyle(
-                      fontWeight: FontWeight.w500,
-                      color: Theme.of(context).textTheme.bodyText2.color,
-                      fontFamily:
-                          Theme.of(context).textTheme.bodyText2.fontFamily,
-                      fontSize: ResponsiveSize.responsiveHeight(16, context),
-                    ),
-                  ),
-                ),
-              ),
-              GestureDetector(
-                //отправка сообщения
-                onTap: () {
-                  BlocProvider.of<ChatBloc>(context).add(
-                    SendMessageEvent(
-                      Message(
-                        content: textEditingController.text,
-                        sender: "User",
-                        time: DateTime.now(),
+          child: StatefulBuilder(
+            builder: (context, setState) {
+              return Row(
+                mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                children: <Widget>[
+                  Container(
+                    height: ResponsiveSize.responsiveHeight(40, context),
+                    width: ResponsiveSize.responsiveHeight(40, context),
+                    decoration: BoxDecoration(
+                      color: Theme.of(context).primaryColor,
+                      borderRadius: BorderRadius.all(
+                        Radius.circular(10),
                       ),
-                      '89184735828',
                     ),
-                  );
-                  textEditingController.text = "";
-                },
-                child: Container(
-                  width: ResponsiveSize.responsiveWidth(50, context),
-                  height: ResponsiveSize.responsiveHeight(40, context),
-                  decoration: BoxDecoration(
-                    color: Theme.of(context).accentColor,
-                    borderRadius: BorderRadius.only(
-                      topLeft: Radius.circular(8),
-                      bottomLeft: Radius.circular(8),
+                    child: Center(
+                      child: GestureDetector(
+                        //отправка изображения
+                        onTap: () async {},
+                        child: Icon(
+                          Icons.image,
+                          color: Colors.white,
+                          size: ResponsiveSize.responsiveHeight(18, context),
+                        ),
+                      ),
                     ),
                   ),
-                  child: Center(
-                    child: Icon(
-                      Icons.send,
-                      size: ResponsiveSize.responsiveHeight(21, context),
-                      color: Colors.white,
+                  Container(
+                    width: ResponsiveSize.responsiveWidth(230, context),
+                    child: TextField(
+                      onChanged: (_) {
+                        setState(() {
+                          _isMessageEmpty = textEditingController.text.isEmpty;
+                        });
+                      },
+                      textCapitalization: TextCapitalization.sentences,
+                      minLines: 1,
+                      maxLines: 4,
+                      controller: textEditingController,
+                      textInputAction: TextInputAction.newline,
+                      style: TextStyle(
+                        fontSize: 16.0,
+                        color: Colors.black,
+                      ),
+                      decoration: InputDecoration(
+                        hintText: 'Введите сообщение...',
+                        border: InputBorder.none,
+                        hintStyle: TextStyle(
+                          fontWeight: FontWeight.w500,
+                          color: Theme.of(context).textTheme.bodyText2.color,
+                          fontFamily:
+                              Theme.of(context).textTheme.bodyText2.fontFamily,
+                          fontSize:
+                              ResponsiveSize.responsiveHeight(16, context),
+                        ),
+                      ),
                     ),
                   ),
-                ),
-              )
-            ],
+                  GestureDetector(
+                    //отправка сообщения
+                    onTap: !_isMessageEmpty
+                        ? () {
+                            BlocProvider.of<ChatBloc>(context).add(
+                              SendMessageEvent(
+                                Message(
+                                  content: textEditingController.text,
+                                  sender: "User",
+                                  time: DateTime.now(),
+                                ),
+                                '89184735828',
+                              ),
+                            );
+                            textEditingController.text = "";
+                            setState(() {
+                              _isMessageEmpty = true;
+                            });
+                          }
+                        : null,
+                    child: Container(
+                      width: ResponsiveSize.responsiveWidth(50, context),
+                      height: ResponsiveSize.responsiveHeight(40, context),
+                      decoration: BoxDecoration(
+                        color: _isMessageEmpty
+                            ? Colors.grey
+                            : Theme.of(context).accentColor,
+                        borderRadius: BorderRadius.only(
+                          topLeft: Radius.circular(8),
+                          bottomLeft: Radius.circular(8),
+                        ),
+                      ),
+                      child: Center(
+                        child: Icon(
+                          Icons.send,
+                          size: ResponsiveSize.responsiveHeight(21, context),
+                          color: _isMessageEmpty ? Colors.black : Colors.white,
+                        ),
+                      ),
+                    ),
+                  )
+                ],
+              );
+            },
           ),
         ),
       ],

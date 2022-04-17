@@ -13,22 +13,14 @@ class ConnectivityIndicator extends StatelessWidget {
       duration: const Duration(milliseconds: 200),
       child: Container(
         height: 30,
-        width: MediaQuery.of(context).size.width,
+        width: 900,
         alignment: Alignment.center,
         color: Colors.red,
-        child: Card(
-          elevation: 0,
-          color: Colors.red,
-          child: Text(
-            'Отсутствует подключение к интернету',
-            style: TextStyle(
-              color: Colors.white,
-              fontFamily: Theme.of(context).textTheme.bodyText1.fontFamily,
-              fontSize: ResponsiveSize.responsiveHeight(
-                15,
-                context,
-              ),
-            ),
+        child: Text(
+          'Отсутствует подключение к интернету',
+          style: TextStyle(
+            color: Colors.white,
+            fontSize: 15,
           ),
         ),
       ),

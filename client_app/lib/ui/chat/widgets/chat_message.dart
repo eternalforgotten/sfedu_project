@@ -4,11 +4,9 @@ import 'package:flutter/material.dart';
 
 class ChatMessage extends StatelessWidget {
   final Message message;
-  final bool date;
   final DateTime timeOfMessage;
   ChatMessage({
     this.message,
-    this.date = false,
   }) : this.timeOfMessage = message.time;
 
   @override
@@ -177,7 +175,7 @@ class ChatMessage extends StatelessWidget {
       );
     }
 
-    if (!date) {
+    if (!message.needDate) {
       return messageWidget();
     } else {
       return Column(

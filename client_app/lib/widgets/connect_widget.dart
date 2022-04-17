@@ -4,31 +4,20 @@ import 'package:connectivity_plus/connectivity_plus.dart';
 import 'package:flutter/material.dart';
 
 class ConnectWidget extends StatelessWidget {
-  const ConnectWidget({Key key}) : super(key: key);
+  final ConnectivityResult initial;
+  const ConnectWidget(this.initial, {Key key}) : super(key: key);
 
   @override
   Widget build(BuildContext context) {
-    return Stack(
-      children: [
-        Navigator(
-          onGenerateRoute: onGenerateRoute,
-        ),
-        StreamBuilder<ConnectivityResult>(
-          stream: Connectivity().onConnectivityChanged,
-          builder: (context, snapshot) {
-            bool connected;
-            if (snapshot.data == ConnectivityResult.none){
-              connected = false;
-            }
-            else {
-              connected = true;
-            }
-            return ConnectivityIndicator(
-              topPosition: connected ? -30 : 35,
-            );
-          },
-        ),
-      ],
+    return StreamBuilder<ConnectivityResult>(
+      initialData: initial,
+      stream: Connectivity().onConnectivityChanged,
+      builder: (context, snapshot) {
+        bool connected = snapshot.data != ConnectivityResult.none;
+        return ConnectivityIndicator(
+          topPosition: connected ? -30 : 35,
+        );
+      },
     );
   }
 }

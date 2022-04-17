@@ -8,16 +8,13 @@ class Chat extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return Container(
-      color: Colors.white,
-      child: SafeArea(
-        child: Scaffold(
-          body: Column(
-            children: <Widget>[
-              AppbarChat(),
-              Expanded(child: ListOfMessagesAndNavbarChat()),
-            ],
-          ),
+    return SafeArea(
+      child: Scaffold(
+        body: Column(
+          children: <Widget>[
+            AppbarChat(),
+            Expanded(child: ListOfMessagesAndNavbarChat()),
+          ],
         ),
       ),
     );

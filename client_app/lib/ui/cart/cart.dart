@@ -9,69 +9,71 @@ import 'widgets.dart/title_block.dart';
 class CartPage extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
-    return Scaffold(
-      body: Column(
-        crossAxisAlignment: CrossAxisAlignment.start,
-        children: <Widget>[
-          Expanded(
-            flex: 89,
-            child: Column(
-              crossAxisAlignment: CrossAxisAlignment.start,
-              children: <Widget>[
-                Row(
-                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                  children: [
-                    Padding(
-                      padding: EdgeInsets.only(
-                        left: ResponsiveSize.responsiveWidth(24, context),
-                        top: ResponsiveSize.responsiveHeight(45, context),
-                        bottom: ResponsiveSize.responsiveHeight(24, context),
-                      ),
-                      child: PopBackButton(),
-                    ),
-                    Padding(
-                      padding: EdgeInsets.only(
-                        right: ResponsiveSize.responsiveWidth(24, context),
-                        top: ResponsiveSize.responsiveHeight(45, context),
-                        bottom: ResponsiveSize.responsiveHeight(24, context),
-                      ),
-                      child: Container(
-                        height: ResponsiveSize.responsiveHeight(40, context),
-                        width: ResponsiveSize.responsiveHeight(40, context),
-                        decoration: BoxDecoration(
-                          color: Theme.of(context).primaryColor,
-                          borderRadius: BorderRadius.circular(10),
+    return SafeArea(
+      child: Scaffold(
+        body: Column(
+          crossAxisAlignment: CrossAxisAlignment.start,
+          children: <Widget>[
+            Expanded(
+              flex: 89,
+              child: Column(
+                crossAxisAlignment: CrossAxisAlignment.start,
+                children: <Widget>[
+                  Row(
+                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                    children: [
+                      Padding(
+                        padding: EdgeInsets.only(
+                          left: ResponsiveSize.responsiveWidth(24, context),
+                          top: ResponsiveSize.responsiveHeight(20, context),
+                          bottom: ResponsiveSize.responsiveHeight(24, context),
                         ),
-                        child: Icon(
-                          Icons.exit_to_app,
-                          color: Colors.white,
-                          size: ResponsiveSize.responsiveHeight(19, context),
-                        ),
+                        child: PopBackButton(),
                       ),
+                      // Padding(
+                      //   padding: EdgeInsets.only(
+                      //     right: ResponsiveSize.responsiveWidth(24, context),
+                      //     top: ResponsiveSize.responsiveHeight(20, context),
+                      //     bottom: ResponsiveSize.responsiveHeight(24, context),
+                      //   ),
+                      //   child: Container(
+                      //     height: ResponsiveSize.responsiveHeight(40, context),
+                      //     width: ResponsiveSize.responsiveHeight(40, context),
+                      //     decoration: BoxDecoration(
+                      //       color: Theme.of(context).primaryColor,
+                      //       borderRadius: BorderRadius.circular(10),
+                      //     ),
+                      //     child: Icon(
+                      //       Icons.exit_to_app,
+                      //       color: Colors.white,
+                      //       size: ResponsiveSize.responsiveHeight(19, context),
+                      //     ),
+                      //   ),
+                      // ),
+                    ],
+                  ),
+                  Padding(
+                    padding: EdgeInsets.only(
+                      left: ResponsiveSize.responsiveWidth(24, context),
+                      bottom: ResponsiveSize.responsiveHeight(16, context),
                     ),
-                  ],
-                ),
-                Padding(
-                  padding: EdgeInsets.only(
-                    left: ResponsiveSize.responsiveWidth(24, context),
-                    bottom: ResponsiveSize.responsiveHeight(16, context),
+                    child: TitleBlock(),
                   ),
-                  child: TitleBlock(),
-                ),
-                Padding(
-                  padding: EdgeInsets.only(
-                    right: ResponsiveSize.responsiveWidth(24, context),
+                  Padding(
+                    padding: EdgeInsets.only(
+                      right: ResponsiveSize.responsiveWidth(24, context),
+                    ),
+                    child: ListOfDishes(),
                   ),
-                  child: ListOfDishes(),
-                ),
-              ],
+                ],
+              ),
             ),
-          ),
-          Expanded(
-            flex: 11,
-            child: Navbar(),
-          ),
-        ],
+            Expanded(
+              flex: 11,
+              child: Navbar(),
+            ),
+          ],
+        ),
       ),
     );
   }

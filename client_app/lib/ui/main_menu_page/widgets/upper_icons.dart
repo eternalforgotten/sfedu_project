@@ -1,7 +1,7 @@
+import 'package:client_app/business_logic/auth_bloc/auth_bloc.dart';
 import 'package:client_app/responsive_size.dart';
-import 'package:client_app/ui/cart/cart.dart';
-import 'package:client_app/ui/chat/chat.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
 
 class UpperIcons extends StatelessWidget {
   @override
@@ -19,9 +19,11 @@ class UpperIcons extends StatelessWidget {
             onTap: () async {
               ScaffoldMessenger.of(context).removeCurrentSnackBar();
               FocusScope.of(context).unfocus();
-              Navigator.of(context).pushNamed(
-                '/chat'
-              );
+              if (BlocProvider.of<AuthBloc>(context).currentUser == null) {
+                Navigator.of(context).pushNamed('/phone');
+              } else {
+                Navigator.of(context).pushNamed('/chat');
+              }
             },
             child: Container(
               height: ResponsiveSize.responsiveHeight(40, context),
@@ -44,8 +46,7 @@ class UpperIcons extends StatelessWidget {
             onTap: () async {
               FocusScope.of(context).unfocus();
               ScaffoldMessenger.of(context).removeCurrentSnackBar();
-              await Navigator.of(context)
-                  .pushNamed('/cart');
+              Navigator.of(context).pushNamed('/cart');
             },
             child: Container(
               height: ResponsiveSize.responsiveHeight(40, context),

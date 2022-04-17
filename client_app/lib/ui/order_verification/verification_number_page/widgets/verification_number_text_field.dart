@@ -1,13 +1,15 @@
 import 'package:client_app/responsive_size.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter/services.dart';
 import 'package:mask_text_input_formatter/mask_text_input_formatter.dart';
 
 class VerificationNumberTextField extends StatefulWidget {
   final TextEditingController controller;
-  final Function onSubmitted;
+  final void Function(String) onSubmitted;
 
-  VerificationNumberTextField(this.controller, this.onSubmitted);
+  VerificationNumberTextField({
+    @required this.controller,
+    this.onSubmitted,
+  });
 
   @override
   _VerificationNumberTextFieldState createState() =>
@@ -17,6 +19,7 @@ class VerificationNumberTextField extends StatefulWidget {
 class _VerificationNumberTextFieldState
     extends State<VerificationNumberTextField> {
   FocusNode _focusNode = FocusNode();
+  
 
   @override
   void dispose() {

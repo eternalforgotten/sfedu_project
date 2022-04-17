@@ -14,16 +14,20 @@ class ChatBloc extends Bloc<ChatEvent, ChatState> {
     on<SendMessageEvent>(_onSendMessage);
   }
   Future<void> _onUserChatFetch(FetchChatEvent event, Emitter emit) async {
-    var userChat =
+    var doc =
         await _firebaseFirestore.collection('chats').doc(event.number).get();
-    var rawMessages = userChat.data()['messages'] as List<dynamic>;
-    List<Message> messages = [];
-    rawMessages.forEach((rawMessage) {
-      final data = rawMessage as Map<String, Object>;
-      final message = Message.fromJson(data);
-      messages.add(message);
-    });
-    _userMessages = messages;
+    if (doc.exists) {
+      var userChat =
+          await _firebaseFirestore.collection('chats').doc(event.number).get();
+      var rawMessages = userChat.data()['messages'] as List<dynamic>;
+      List<Message> messages = [];
+      rawMessages.forEach((rawMessage) {
+        final data = rawMessage as Map<String, Object>;
+        final message = Message.fromJson(data);
+        messages.add(message);
+      });
+      _userMessages = messages;
+    }
   }
 
   Future<void> _onSendMessage(SendMessageEvent event, Emitter emit) async {
@@ -31,27 +35,35 @@ class ChatBloc extends Bloc<ChatEvent, ChatState> {
     final sentMessage = event.message;
     var userChat =
         await _firebaseFirestore.collection('chats').doc(number).get();
-    var rawMessages = userChat.data()['messages'] as List<dynamic>;
     var addedMessage = Message(
       time: sentMessage.time,
       sender: sentMessage.sender,
       content: sentMessage.content,
       needDate: _needDate(sentMessage),
     );
-    var messages = rawMessages
-        .map((e) => Message.fromJson(e as Map<String, Object>))
-        .toList();
-    messages.add(addedMessage);
-    var newData = messages.map((e) => e.toJson()).toList();
-    await _firebaseFirestore.collection('chats').doc(number).update({
-      'messages': newData,
-    });
+    if (userChat.exists) {
+      var rawMessages = userChat.data()['messages'] as List<dynamic>;
+      var messages = rawMessages
+          .map((e) => Message.fromJson(e as Map<String, Object>))
+          .toList();
+      messages.add(addedMessage);
+      var newData = messages.map((e) => e.toJson()).toList();
+      await _firebaseFirestore.collection('chats').doc(number).update({
+        'messages': newData,
+      });
+    } else {
+      List<dynamic> newData = []..add(addedMessage.toJson());
+      await _firebaseFirestore.collection('chats').doc(number).set({
+        'messages': newData,
+      });
+    }
     _userMessages.add(addedMessage);
   }
 
   bool _needDate(Message msg) {
     bool isFirstMsg = _userMessages.isEmpty;
-    bool areDaysDiffer = _userMessages.last.time.day != msg.time.day;
+    bool areDaysDiffer =
+        _userMessages.isNotEmpty && _userMessages.last.time.day != msg.time.day;
     return isFirstMsg || areDaysDiffer;
   }
 }
