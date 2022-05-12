@@ -1,3 +1,4 @@
+import 'package:client_app/business_logic/auth_bloc/auth_bloc.dart';
 import 'package:client_app/business_logic/chat_bloc/chat_bloc.dart';
 import 'package:client_app/ui/chat/widgets/chat_message.dart';
 import 'package:client_app/classes/message.dart';
@@ -17,11 +18,11 @@ class ListOfMessagesAndNavbarChat extends StatefulWidget {
 class _ListOfMessagesAndNavbarChatState
     extends State<ListOfMessagesAndNavbarChat> {
   TextEditingController textEditingController = TextEditingController();
-  ScrollController _controller = ScrollController();
   RefreshController _refreshController = RefreshController();
   bool _isMessageEmpty = true;
   @override
   Widget build(BuildContext context) {
+    final String userPhone = BlocProvider.of<AuthBloc>(context).currentUser.phoneNumber;
     return Column(
       children: <Widget>[
         Expanded(
@@ -66,7 +67,7 @@ class _ListOfMessagesAndNavbarChatState
               child: StreamBuilder<DocumentSnapshot>(
                 stream: FirebaseFirestore.instance
                     .collection('chats')
-                    .doc('89184735828')
+                    .doc(userPhone)
                     .snapshots(),
                 builder: (ctx, snap) {
                   var hasData = snap.hasData;
@@ -169,7 +170,7 @@ class _ListOfMessagesAndNavbarChatState
                                   sender: "User",
                                   time: DateTime.now(),
                                 ),
-                                '89184735828',
+                                userPhone,
                               ),
                             );
                             textEditingController.text = "";

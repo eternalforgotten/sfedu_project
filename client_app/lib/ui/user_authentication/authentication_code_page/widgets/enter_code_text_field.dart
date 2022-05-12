@@ -1,10 +1,7 @@
-import 'package:client_app/business_logic/cart_bloc/cart_bloc.dart';
-import 'package:client_app/repos/repo.dart';
+import 'package:client_app/business_logic/auth_bloc/auth_bloc.dart';
 import 'package:client_app/responsive_size.dart';
-import 'package:client_app/ui/main_menu_page/main_menu_page.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
-
 import 'package:pin_code_fields/pin_code_fields.dart';
 
 class EnterCodeTextField extends StatelessWidget {
@@ -12,16 +9,19 @@ class EnterCodeTextField extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    final bloc = BlocProvider.of<AuthBloc>(context);
     return Container(
-      width: ResponsiveSize.responsiveHeight(220, context),
+      width: ResponsiveSize.responsiveHeight(270, context),
       child: PinCodeTextField(
         appContext: context,
         onChanged: (_) {},
         controller: controller,
-        length: 4,
+        length: 6,
         onCompleted: (text) {
-          BlocProvider.of<CartBloc>(context).add(ClearEvent());
-          Navigator.of(context).popUntil((route) => route.isFirst);
+          final id = bloc.verificationId;
+          if (id != null){
+            bloc.add(SendCodeEvent(text, id));
+          }
         },
         pinTheme: PinTheme(
           activeColor: Color(0xFFE2E2E2),

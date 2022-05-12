@@ -3,10 +3,9 @@ import 'package:client_app/ui/cart/cart.dart';
 import 'package:client_app/ui/chat/chat.dart';
 import 'package:client_app/ui/item_page/item_page.dart';
 import 'package:client_app/ui/main_menu_page/main_menu_page.dart';
-import 'package:client_app/ui/order_verification/verification_code_page/verification_code_page.dart';
-import 'package:client_app/ui/order_verification/verification_number_page/verification_number_page.dart';
+import 'package:client_app/ui/user_authentication/authentication_code_page/authentication_code_page.dart';
+import 'package:client_app/ui/user_authentication/authentication_number_page/authentication_number_page.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter_bloc/flutter_bloc.dart';
 
 Route onGenerateRoute(RouteSettings settings) {
   switch (settings.name) {
@@ -25,25 +24,25 @@ Route onGenerateRoute(RouteSettings settings) {
     case '/chat':
       return MaterialPageRoute(
         builder: (context) {
-          return BlocProvider(
-            create: (context) => ChatBloc()
-              ..add(
-                FetchChatEvent('89184735828'),
-              ),
-            child: Chat(),
-          );
+          return Chat();
         },
       );
     case '/phone':
       return MaterialPageRoute(
         builder: (context) {
-          return VerificationNumberPage();
+          final args = settings.arguments as Map<String, Object>;
+          final title = args['title'] as String;
+          final action = args['action'] as VoidCallback;
+          return AuthenticationNumberPage(
+            title,
+            action: action,
+          );
         },
       );
     case '/code':
       return MaterialPageRoute(
         builder: (context) {
-          return VerificationCodePage();
+          return AuthenticationCodePage(action: settings.arguments as VoidCallback);
         },
       );
     default:

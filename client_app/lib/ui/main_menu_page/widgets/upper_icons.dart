@@ -19,11 +19,7 @@ class UpperIcons extends StatelessWidget {
             onTap: () async {
               ScaffoldMessenger.of(context).removeCurrentSnackBar();
               FocusScope.of(context).unfocus();
-              if (BlocProvider.of<AuthBloc>(context).currentUser == null) {
-                Navigator.of(context).pushNamed('/phone');
-              } else {
-                Navigator.of(context).pushNamed('/chat');
-              }
+              BlocProvider.of<AuthBloc>(context).add(FetchUserEvent());
             },
             child: Container(
               height: ResponsiveSize.responsiveHeight(40, context),

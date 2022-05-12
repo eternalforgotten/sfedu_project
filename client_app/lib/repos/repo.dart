@@ -41,7 +41,8 @@ class CartRepository{
     _repoCart.remove(element);
   }
   void clear(){
-    _repoCart.forEach((element){
+    final tempList = [..._repoCart];
+    tempList.forEach((element){
       remove(element.id);
     });
   }

@@ -1,5 +1,6 @@
 import 'package:client_app/business_logic/auth_bloc/auth_bloc.dart';
 import 'package:client_app/business_logic/cart_bloc/cart_bloc.dart';
+import 'package:client_app/business_logic/chat_bloc/chat_bloc.dart';
 import 'package:client_app/business_logic/dish_bloc/dish_bloc.dart';
 import 'package:client_app/repos/repo.dart';
 import 'package:client_app/router.dart';
@@ -37,7 +38,10 @@ class MyApp extends StatelessWidget {
           create: (context) => CartBloc(cartRepo),
         ),
         BlocProvider(
-          create: (context) => AuthBloc()..add(FetchUserEvent()),
+          create: (context) => AuthBloc(),
+        ),
+         BlocProvider(
+          create: (context) => ChatBloc(),
         ),
       ],
       child: Directionality(

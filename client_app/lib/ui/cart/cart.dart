@@ -30,26 +30,6 @@ class CartPage extends StatelessWidget {
                         ),
                         child: PopBackButton(),
                       ),
-                      // Padding(
-                      //   padding: EdgeInsets.only(
-                      //     right: ResponsiveSize.responsiveWidth(24, context),
-                      //     top: ResponsiveSize.responsiveHeight(20, context),
-                      //     bottom: ResponsiveSize.responsiveHeight(24, context),
-                      //   ),
-                      //   child: Container(
-                      //     height: ResponsiveSize.responsiveHeight(40, context),
-                      //     width: ResponsiveSize.responsiveHeight(40, context),
-                      //     decoration: BoxDecoration(
-                      //       color: Theme.of(context).primaryColor,
-                      //       borderRadius: BorderRadius.circular(10),
-                      //     ),
-                      //     child: Icon(
-                      //       Icons.exit_to_app,
-                      //       color: Colors.white,
-                      //       size: ResponsiveSize.responsiveHeight(19, context),
-                      //     ),
-                      //   ),
-                      // ),
                     ],
                   ),
                   Padding(

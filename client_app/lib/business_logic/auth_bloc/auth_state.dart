@@ -10,3 +10,19 @@ class FetchedUser extends AuthState {
 
   FetchedUser(this.user);
 }
+
+class NumberSentState extends AuthState {}
+
+class AuthErrorState extends AuthState {
+  final String message;
+
+  AuthErrorState(this.message);
+}
+
+class UserAuthenticatedState extends AuthState {
+  final String userPhone;
+
+  UserAuthenticatedState(this.userPhone);
+}
+
+class UserNonAuthenticatedState extends AuthState {}

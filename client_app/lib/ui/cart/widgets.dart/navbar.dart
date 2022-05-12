@@ -1,10 +1,11 @@
 import 'dart:async';
 
 import 'package:client_app/added_dish_snackbar.dart';
+import 'package:client_app/business_logic/auth_bloc/auth_bloc.dart';
 import 'package:client_app/business_logic/cart_bloc/cart_bloc.dart';
+import 'package:client_app/business_logic/chat_bloc/chat_bloc.dart';
 import 'package:client_app/business_logic/dish_bloc/dish_bloc.dart';
 import 'package:client_app/responsive_size.dart';
-import 'package:client_app/ui/order_verification/verification_number_page/verification_number_page.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
@@ -19,18 +20,23 @@ class _NavbarState extends State<Navbar> {
   StreamSubscription streamSubscription;
   @override
   void initState() {
-    streamSubscription = FirebaseFirestore.instance.collection('dishes').snapshots().listen((event) {
+    streamSubscription = FirebaseFirestore.instance
+        .collection('dishes')
+        .snapshots()
+        .listen((event) {
       BlocProvider.of<DishBloc>(context, listen: false).add(FetchEvent());
       BlocProvider.of<CartBloc>(context, listen: false).add(CartChangedEvent());
     });
     // TODO: implement initState
     super.initState();
   }
+
   @override
   void dispose() {
     streamSubscription.cancel();
     super.dispose();
   }
+
   @override
   Widget build(BuildContext context) {
     return Container(
@@ -38,7 +44,7 @@ class _NavbarState extends State<Navbar> {
         left: ResponsiveSize.responsiveWidth(25, context),
       ),
       child: BlocBuilder<CartBloc, CartState>(
-        builder: (context, state) {
+        builder: (inner, state) {
           var sum = 0;
           if (state is CartChangedState) {
             sum = state.totalSum;
@@ -70,15 +76,41 @@ class _NavbarState extends State<Navbar> {
               ),
               GestureDetector(
                 onTap: () {
-                  BlocProvider.of<CartBloc>(context).cart.cart.isNotEmpty
-                      ? Navigator.of(context).push(
-                          MaterialPageRoute(
-                            builder: (_) => VerificationNumberPage(),
-                          ),
-                        )
-                      : ScaffoldMessenger.of(context).showSnackBar(
-                          simpleSnackBar("Добавьте блюда в корзину!"),
-                        );
+                  final user = BlocProvider.of<AuthBloc>(context).currentUser;
+                  final cartBloc = BlocProvider.of<CartBloc>(context);
+                  final userCart = cartBloc.cart.cart;
+                  final total = cartBloc.recalculate();
+                  if (userCart.isEmpty) {
+                    ScaffoldMessenger.of(context).showSnackBar(
+                      simpleSnackBar("Добавьте блюда в корзину!"),
+                    );
+                    return;
+                  }
+                  if (user == null) {
+                    Navigator.of(context).pushNamed(
+                      '/phone',
+                      arguments: {
+                        'title':
+                            "Для оформления заказа введите номер телефона. На него придёт СМС с кодом подтверждения.",
+                        'action': () => print(''),
+                      },
+                    );
+                  } else {
+                    BlocProvider.of<ChatBloc>(context).add(
+                      SendOrderMessageEvent(
+                        number: user.phoneNumber,
+                        dishes: userCart,
+                        total: total,
+                        action: () => cartBloc.add(ClearEvent()),
+                      ),
+                    );
+                    Navigator.pushNamedAndRemoveUntil(
+                      context,
+                      '/chat',
+                      (route) => route.isFirst,
+                      arguments: user.phoneNumber,
+                    );
+                  }
                 },
                 child: Container(
                   width: ResponsiveSize.responsiveWidth(220, context),
