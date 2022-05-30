@@ -13,6 +13,7 @@ class AuthBloc extends Bloc<AuthEvent, AuthState> {
     on<FetchUserEvent>(_onFetchUser);
     on<SendNumberEvent>(_sendNumberEvent);
     on<SendCodeEvent>(_sendCodeEvent);
+    on<SignOutEvent>(_signOutEvent);
   }
 
   Future<void> _onFetchUser(FetchUserEvent event, Emitter emit) async {
@@ -77,6 +78,7 @@ class AuthBloc extends Bloc<AuthEvent, AuthState> {
   Future<void> _signOutEvent(SignOutEvent event, Emitter emit) async {
     final auth = FirebaseAuth.instance;
     await auth.signOut();
+    currentUser = null;
     emit(UserNonAuthenticatedState());
   }
 

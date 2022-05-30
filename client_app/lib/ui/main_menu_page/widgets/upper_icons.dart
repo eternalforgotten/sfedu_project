@@ -1,5 +1,6 @@
 import 'package:client_app/business_logic/auth_bloc/auth_bloc.dart';
 import 'package:client_app/responsive_size.dart';
+import 'package:client_app/ui/main_menu_page/widgets/logout_button.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 
@@ -19,7 +20,20 @@ class UpperIcons extends StatelessWidget {
             onTap: () async {
               ScaffoldMessenger.of(context).removeCurrentSnackBar();
               FocusScope.of(context).unfocus();
-              BlocProvider.of<AuthBloc>(context).add(FetchUserEvent());
+              final state = BlocProvider.of<AuthBloc>(context).state;
+              if (state is UserAuthenticatedState) {
+                Navigator.of(context).pushNamed(
+                  '/chat',
+                  arguments: state.userPhone,
+                );
+              } else {
+                Navigator.of(context).pushNamed(
+                  '/phone',
+                  arguments: {
+                    'title': "Для входа в чат, необходимо зарегистрироваться",
+                  },
+                );
+              }
             },
             child: Container(
               height: ResponsiveSize.responsiveHeight(40, context),
@@ -37,6 +51,11 @@ class UpperIcons extends StatelessWidget {
                 size: ResponsiveSize.responsiveHeight(19, context),
               ),
             ),
+          ),
+          Visibility(
+            visible: BlocProvider.of<AuthBloc>(context, listen: true).state
+                is UserAuthenticatedState,
+            child: LogoutButton(),
           ),
           GestureDetector(
             onTap: () async {

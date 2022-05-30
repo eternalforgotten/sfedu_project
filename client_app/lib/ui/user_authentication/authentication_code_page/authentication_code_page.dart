@@ -8,8 +8,8 @@ import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 
 class AuthenticationCodePage extends StatelessWidget {
-  final VoidCallback action;
-  AuthenticationCodePage({this.action});
+  final bool needAction;
+  AuthenticationCodePage({this.needAction = false,});
   @override
   Widget build(BuildContext context) {
     return BlocListener<AuthBloc, AuthState>(
@@ -22,13 +22,14 @@ class AuthenticationCodePage extends StatelessWidget {
           );
         }
         if (state is UserAuthenticatedState) {
+          BlocProvider.of<ChatBloc>(context).add(FetchChatEvent(state.userPhone));
           Navigator.pushNamedAndRemoveUntil(
             context,
             '/chat',
             (route) => route.isFirst,
             arguments: state.userPhone,
           );
-          if (action != null) {
+          if (needAction != null) {
             final cartBloc = BlocProvider.of<CartBloc>(context);
             final userCart = cartBloc.cart.cart;
             final total = cartBloc.recalculate();

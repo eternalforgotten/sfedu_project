@@ -22,7 +22,8 @@ class _ListOfMessagesAndNavbarChatState
   bool _isMessageEmpty = true;
   @override
   Widget build(BuildContext context) {
-    final String userPhone = BlocProvider.of<AuthBloc>(context).currentUser.phoneNumber;
+    final String userPhone =
+        BlocProvider.of<AuthBloc>(context).currentUser.phoneNumber;
     return Column(
       children: <Widget>[
         Expanded(
@@ -165,12 +166,8 @@ class _ListOfMessagesAndNavbarChatState
                         ? () {
                             BlocProvider.of<ChatBloc>(context).add(
                               SendMessageEvent(
-                                Message(
-                                  content: textEditingController.text,
-                                  sender: "User",
-                                  time: DateTime.now(),
-                                ),
-                                userPhone,
+                                message: textEditingController.text,
+                                number: userPhone,
                               ),
                             );
                             textEditingController.text = "";

@@ -1,4 +1,3 @@
-import 'package:client_app/business_logic/chat_bloc/chat_bloc.dart';
 import 'package:client_app/ui/cart/cart.dart';
 import 'package:client_app/ui/chat/chat.dart';
 import 'package:client_app/ui/item_page/item_page.dart';
@@ -32,17 +31,17 @@ Route onGenerateRoute(RouteSettings settings) {
         builder: (context) {
           final args = settings.arguments as Map<String, Object>;
           final title = args['title'] as String;
-          final action = args['action'] as VoidCallback;
+          final action = args['needAction'] as bool;
           return AuthenticationNumberPage(
             title,
-            action: action,
+            needAction: action,
           );
         },
       );
     case '/code':
       return MaterialPageRoute(
         builder: (context) {
-          return AuthenticationCodePage(action: settings.arguments as VoidCallback);
+          return AuthenticationCodePage(needAction: settings.arguments as bool);
         },
       );
     default:

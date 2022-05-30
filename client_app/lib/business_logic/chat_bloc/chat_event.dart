@@ -6,14 +6,14 @@ abstract class ChatEvent {}
 class FetchChatEvent extends ChatEvent {
   final String number;
 
-  FetchChatEvent({this.number});
+  FetchChatEvent(this.number);
 }
 
 class SendMessageEvent extends ChatEvent {
   final String number;
-  final Message message;
+  final String message;
 
-  SendMessageEvent(this.message, this.number);
+  SendMessageEvent({@required this.message, @required this.number});
 }
 
 class SendOrderMessageEvent extends ChatEvent {

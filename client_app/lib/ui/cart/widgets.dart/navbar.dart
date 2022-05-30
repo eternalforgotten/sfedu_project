@@ -92,7 +92,7 @@ class _NavbarState extends State<Navbar> {
                       arguments: {
                         'title':
                             "Для оформления заказа введите номер телефона. На него придёт СМС с кодом подтверждения.",
-                        'action': () => print(''),
+                        'needAction': true,
                       },
                     );
                   } else {

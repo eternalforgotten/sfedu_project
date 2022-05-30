@@ -9,9 +9,9 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 
 class AuthenticationNumberPage extends StatefulWidget {
   final String title;
-  final VoidCallback action;
+  final bool needAction;
 
-  AuthenticationNumberPage(this.title, {this.action});
+  AuthenticationNumberPage(this.title, {this.needAction = false});
   @override
   _AuthenticationNumberPageState createState() => _AuthenticationNumberPageState();
 }
@@ -32,7 +32,7 @@ class _AuthenticationNumberPageState extends State<AuthenticationNumberPage> {
         if (state is NumberSentState) {
           Navigator.of(context).pushNamed(
             '/code',
-            arguments: widget.action
+            arguments: widget.needAction,
           );
         }
         if (state is AuthErrorState) {

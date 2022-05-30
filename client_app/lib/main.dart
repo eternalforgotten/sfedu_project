@@ -38,7 +38,8 @@ class MyApp extends StatelessWidget {
           create: (context) => CartBloc(cartRepo),
         ),
         BlocProvider(
-          create: (context) => AuthBloc(),
+          lazy: false,
+          create: (context) => AuthBloc()..add(FetchUserEvent()),
         ),
          BlocProvider(
           create: (context) => ChatBloc(),
