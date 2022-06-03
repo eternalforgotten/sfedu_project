@@ -134,7 +134,7 @@ class ChatBloc extends Bloc<ChatEvent, ChatState> {
       content +=
           '${dish.name} по цене ${_adjustedPrice(dish.price)}, ${_adjustedQuantity(dish.quantity)}.\n';
     });
-    content += 'Итого: $total.\n';
+    content += 'Итого: ${_adjustedPrice(total.toString())}.\n';
     content += 'Заказ будет ждать вас по адресу нашего ресторана';
     return content;
   }

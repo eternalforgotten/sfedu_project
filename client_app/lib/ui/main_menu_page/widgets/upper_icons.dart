@@ -31,6 +31,7 @@ class UpperIcons extends StatelessWidget {
                   '/phone',
                   arguments: {
                     'title': "Для входа в чат, необходимо зарегистрироваться",
+                    'page': '/chat',
                   },
                 );
               }

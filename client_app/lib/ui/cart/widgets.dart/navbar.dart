@@ -79,7 +79,6 @@ class _NavbarState extends State<Navbar> {
                   final user = BlocProvider.of<AuthBloc>(context).currentUser;
                   final cartBloc = BlocProvider.of<CartBloc>(context);
                   final userCart = cartBloc.cart.cart;
-                  final total = cartBloc.recalculate();
                   if (userCart.isEmpty) {
                     ScaffoldMessenger.of(context).showSnackBar(
                       simpleSnackBar("Добавьте блюда в корзину!"),
@@ -93,21 +92,13 @@ class _NavbarState extends State<Navbar> {
                         'title':
                             "Для оформления заказа введите номер телефона. На него придёт СМС с кодом подтверждения.",
                         'needAction': true,
+                        'page': '/order',
                       },
                     );
                   } else {
-                    BlocProvider.of<ChatBloc>(context).add(
-                      SendOrderMessageEvent(
-                        number: user.phoneNumber,
-                        dishes: userCart,
-                        total: total,
-                        action: () => cartBloc.add(ClearEvent()),
-                      ),
-                    );
-                    Navigator.pushNamedAndRemoveUntil(
+                    Navigator.pushNamed(
                       context,
-                      '/chat',
-                      (route) => route.isFirst,
+                      '/order',
                       arguments: user.phoneNumber,
                     );
                   }

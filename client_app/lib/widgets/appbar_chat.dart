@@ -2,7 +2,10 @@ import 'package:client_app/ui/item_page/widgets/pop_back_button.dart';
 import 'package:client_app/responsive_size.dart';
 import 'package:flutter/material.dart';
 
-class AppbarChat extends StatelessWidget {
+class CustomAppbar extends StatelessWidget {
+  final String title;
+
+  CustomAppbar(this.title);
   @override
   Widget build(BuildContext context) {
     return Container(
@@ -17,7 +20,7 @@ class AppbarChat extends StatelessWidget {
         children: [
           PopBackButton(),
           Text(
-            "Чат с рестораном",
+            title,
             style: TextStyle(
               fontFamily: Theme.of(context).textTheme.bodyText1.fontFamily,
               color: Theme.of(context).textTheme.bodyText1.color,

@@ -17,7 +17,6 @@ void main() async {
   runApp(MyApp());
 }
 
-bool FIRST = true;
 
 class MyApp extends StatelessWidget {
   final firebase = FirebaseFirestore.instance;

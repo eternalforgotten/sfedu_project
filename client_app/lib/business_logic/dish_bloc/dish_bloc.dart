@@ -32,7 +32,6 @@ class DishBloc extends Bloc<DishEvent, DishState> {
       final dish = Dish.fromJson(data, item.id);
       _dishes.add(dish);
     }
-    FIRST = false;
     if (_selectedCategory == DishCategoryName.all) {
       emit(FetchState(_dishes));
       return;

@@ -1,4 +1,4 @@
-import 'package:client_app/ui/chat/widgets/appbar_chat.dart';
+import 'package:client_app/widgets/appbar_chat.dart';
 import 'package:client_app/ui/chat/widgets/list_of_messages_and_navbar_chat.dart';
 
 import 'package:flutter/material.dart';
@@ -12,7 +12,7 @@ class Chat extends StatelessWidget {
       child: Scaffold(
         body: Column(
           children: <Widget>[
-            AppbarChat(),
+            CustomAppbar("Чат с рестораном"),
             Expanded(child: ListOfMessagesAndNavbarChat()),
           ],
         ),

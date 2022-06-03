@@ -109,27 +109,6 @@ class _ListOfMessagesAndNavbarChatState
                 mainAxisAlignment: MainAxisAlignment.spaceBetween,
                 children: <Widget>[
                   Container(
-                    height: ResponsiveSize.responsiveHeight(40, context),
-                    width: ResponsiveSize.responsiveHeight(40, context),
-                    decoration: BoxDecoration(
-                      color: Theme.of(context).primaryColor,
-                      borderRadius: BorderRadius.all(
-                        Radius.circular(10),
-                      ),
-                    ),
-                    child: Center(
-                      child: GestureDetector(
-                        //отправка изображения
-                        onTap: () async {},
-                        child: Icon(
-                          Icons.image,
-                          color: Colors.white,
-                          size: ResponsiveSize.responsiveHeight(18, context),
-                        ),
-                      ),
-                    ),
-                  ),
-                  Container(
                     width: ResponsiveSize.responsiveWidth(230, context),
                     child: TextField(
                       onChanged: (_) {

@@ -9,7 +9,11 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 
 class AuthenticationCodePage extends StatelessWidget {
   final bool needAction;
-  AuthenticationCodePage({this.needAction = false,});
+  final String page;
+  AuthenticationCodePage({
+    @required this.page,
+    this.needAction = false,
+  });
   @override
   Widget build(BuildContext context) {
     return BlocListener<AuthBloc, AuthState>(
@@ -22,27 +26,14 @@ class AuthenticationCodePage extends StatelessWidget {
           );
         }
         if (state is UserAuthenticatedState) {
-          BlocProvider.of<ChatBloc>(context).add(FetchChatEvent(state.userPhone));
+          BlocProvider.of<ChatBloc>(context)
+              .add(FetchChatEvent(state.userPhone));
           Navigator.pushNamedAndRemoveUntil(
             context,
-            '/chat',
-            (route) => route.isFirst,
+            page,
+            (r) => r.isFirst,
             arguments: state.userPhone,
           );
-          if (needAction != null) {
-            final cartBloc = BlocProvider.of<CartBloc>(context);
-            final userCart = cartBloc.cart.cart;
-            final total = cartBloc.recalculate();
-            BlocProvider.of<ChatBloc>(context).add(
-              SendOrderMessageEvent(
-                action:() => cartBloc.add(ClearEvent()),
-                number: state.userPhone,
-                dishes: userCart,
-                total: total,
-              ),
-            );
-            
-          }
         }
       },
       child: SafeArea(
