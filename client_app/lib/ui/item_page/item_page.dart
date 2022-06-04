@@ -42,12 +42,12 @@ class ItemPage extends StatelessWidget {
                       ],
                     ),
                   ),
-                  StreamBuilder<QuerySnapshot>(
-                    stream: FirebaseFirestore.instance.collection('dishes').snapshots(),
+                  StreamBuilder<DocumentSnapshot>(
+                    stream: FirebaseFirestore.instance.collection('dishes').doc(dish.id).snapshots(),
                     builder: (context, snapshot) {
                       var hasData = snapshot.hasData;
                       var data = hasData 
-                      ? snapshot.data.docs[snapshot.data.docs.indexWhere((element) => element.id == dish.id)] 
+                      ? snapshot.data
                       : null;
                       return Container(
                         height: ResponsiveSize.responsiveHeight(536, context),

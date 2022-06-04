@@ -19,8 +19,7 @@ class AuthBloc extends Bloc<AuthEvent, AuthState> {
   Future<void> _onFetchUser(FetchUserEvent event, Emitter emit) async {
     if (currentUser == null) {
       emit(UserNonAuthenticatedState());
-    }
-    else {
+    } else {
       emit(UserAuthenticatedState(currentUser.phoneNumber));
     }
   }
@@ -41,12 +40,7 @@ class AuthBloc extends Bloc<AuthEvent, AuthState> {
       await _auth.verifyPhoneNumber(
         phoneNumber: number,
         verificationCompleted: (credential) {},
-        verificationFailed: (e) {
-          print(e.toString());
-          if (e.code == 'invalid-phone-number') {
-            print('The provided phone number is not valid.');
-          }
-        },
+        verificationFailed: (e) {},
         codeSent: (verificationId, token) {
           print('the id is ' + verificationId);
           this.verificationId = verificationId;
@@ -69,7 +63,9 @@ class AuthBloc extends Bloc<AuthEvent, AuthState> {
     try {
       var userCredential = await _auth.signInWithCredential(credential);
       currentUser = userCredential.user;
-      emit(UserAuthenticatedState(currentUser.phoneNumber,));
+      emit(UserAuthenticatedState(
+        currentUser.phoneNumber,
+      ));
     } catch (e) {
       emit(AuthErrorState(e.toString()));
     }

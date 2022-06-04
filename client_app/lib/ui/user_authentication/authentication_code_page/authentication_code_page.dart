@@ -1,9 +1,9 @@
 import 'package:client_app/business_logic/auth_bloc/auth_bloc.dart';
-import 'package:client_app/business_logic/cart_bloc/cart_bloc.dart';
 import 'package:client_app/business_logic/chat_bloc/chat_bloc.dart';
 import 'package:client_app/responsive_size.dart';
-import 'package:client_app/ui/user_authentication/verification_appbar.dart';
+import 'package:client_app/simple_snack_bar.dart';
 import 'package:client_app/ui/user_authentication/authentication_code_page/widgets/enter_code_text_field.dart';
+import 'package:client_app/ui/user_authentication/verification_appbar.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 
@@ -19,11 +19,7 @@ class AuthenticationCodePage extends StatelessWidget {
     return BlocListener<AuthBloc, AuthState>(
       listener: (context, state) {
         if (state is AuthErrorState) {
-          ScaffoldMessenger.of(context).showSnackBar(
-            SnackBar(
-              content: Text(state.message),
-            ),
-          );
+          showSimpleSnackBar(context, text: state.message);
         }
         if (state is UserAuthenticatedState) {
           BlocProvider.of<ChatBloc>(context)

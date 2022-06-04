@@ -21,26 +21,30 @@ class DishBloc extends Bloc<DishEvent, DishState> {
   Future<void> _onFetch(FetchEvent event, Emitter emit) async {
     _dishes.clear();
     emit(FetchLoadingState());
-    var rawDishes = await firebaseFirestore.collection('dishes').get();
-    for (var i = 0; i < rawDishes.docs.length; i++) {
-      var item = rawDishes.docs[i];
-      var data = item.data();
-      var url = await FileStorage.downloadPath(item.id);
-      data.addAll({
-        'image_url': url,
-      });
-      final dish = Dish.fromJson(data, item.id);
-      _dishes.add(dish);
-    }
-    if (_selectedCategory == DishCategoryName.all) {
-      emit(FetchState(_dishes));
-      return;
-    }
-    final dishes = _dishes
-        .where((element) => element.category == _selectedCategory)
-        .toList();
+    try {
+      var rawDishes = await firebaseFirestore.collection('dishes').get();
+      for (var i = 0; i < rawDishes.docs.length; i++) {
+        var item = rawDishes.docs[i];
+        var data = item.data();
+        var url = await FileStorage.downloadPath(item.id);
+        data.addAll({
+          'image_url': url,
+        });
+        final dish = Dish.fromJson(data, item.id);
+        _dishes.add(dish);
+      }
+      if (_selectedCategory == DishCategoryName.all) {
+        emit(FetchState(_dishes));
+        return;
+      }
+      final dishes = _dishes
+          .where((element) => element.category == _selectedCategory)
+          .toList();
 
-    emit(FetchState(dishes));
+      emit(FetchState(dishes));
+    } catch (e) {
+      emit(ErrorState('Произошла ошибка при загрузке блюд'));
+    }
   }
 
   void _onCategoryChanged(ChangedCategoryEvent event, Emitter emit) {

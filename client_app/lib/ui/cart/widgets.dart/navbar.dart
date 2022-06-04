@@ -1,6 +1,6 @@
 import 'dart:async';
 
-import 'package:client_app/added_dish_snackbar.dart';
+import 'package:client_app/simple_snack_bar.dart';
 import 'package:client_app/business_logic/auth_bloc/auth_bloc.dart';
 import 'package:client_app/business_logic/cart_bloc/cart_bloc.dart';
 import 'package:client_app/business_logic/chat_bloc/chat_bloc.dart';
@@ -80,9 +80,7 @@ class _NavbarState extends State<Navbar> {
                   final cartBloc = BlocProvider.of<CartBloc>(context);
                   final userCart = cartBloc.cart.cart;
                   if (userCart.isEmpty) {
-                    ScaffoldMessenger.of(context).showSnackBar(
-                      simpleSnackBar("Добавьте блюда в корзину!"),
-                    );
+                    showSimpleSnackBar(context, text: "Блюдо успешно добавлено в корзину!");
                     return;
                   }
                   if (user == null) {

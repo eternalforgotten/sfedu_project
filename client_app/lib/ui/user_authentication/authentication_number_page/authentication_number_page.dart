@@ -1,5 +1,6 @@
 import 'package:client_app/business_logic/auth_bloc/auth_bloc.dart';
 import 'package:client_app/responsive_size.dart';
+import 'package:client_app/simple_snack_bar.dart';
 import 'package:client_app/ui/user_authentication/agreement.dart';
 import 'package:client_app/ui/user_authentication/verification_appbar.dart';
 import 'package:client_app/ui/user_authentication/authentication_number_page/widgets/authentication_number_text_field.dart';
@@ -12,9 +13,11 @@ class AuthenticationNumberPage extends StatefulWidget {
   final bool needAction;
   final String page;
 
-  AuthenticationNumberPage(this.title, {@required this.page, this.needAction = false});
+  AuthenticationNumberPage(this.title,
+      {@required this.page, this.needAction = false});
   @override
-  _AuthenticationNumberPageState createState() => _AuthenticationNumberPageState();
+  _AuthenticationNumberPageState createState() =>
+      _AuthenticationNumberPageState();
 }
 
 class _AuthenticationNumberPageState extends State<AuthenticationNumberPage> {
@@ -40,11 +43,7 @@ class _AuthenticationNumberPageState extends State<AuthenticationNumberPage> {
           );
         }
         if (state is AuthErrorState) {
-          ScaffoldMessenger.of(context).showSnackBar(
-            SnackBar(
-              content: Text(state.message),
-            ),
-          );
+          showSimpleSnackBar(context, text: state.message);
         }
       },
       child: SafeArea(
@@ -86,25 +85,6 @@ class _AuthenticationNumberPageState extends State<AuthenticationNumberPage> {
                         BlocProvider.of<AuthBloc>(context)
                             .add(SendNumberEvent(phoneNumber.text.trim()));
                       },
-                      // onTap: phoneNumber.text.isNotEmpty
-                      //     ? () {
-                      //         ScaffoldMessenger.of(context)
-                      //             .removeCurrentSnackBar();
-                      //         BlocProvider.of<AuthBloc>(context).add(
-                      //           SendNumberEvent(
-                      //             phoneNumber.text.trim(),
-                      //           ),
-                      //         );
-                      //       }
-                      //     : () {
-                      //         ScaffoldMessenger.of(context)
-                      //             .removeCurrentSnackBar();
-                      //         ScaffoldMessenger.of(context).showSnackBar(
-                      //           SnackBar(
-                      //             content: Text('Введите номер телефона'),
-                      //           ),
-                      //         );
-                      //       },
                       child: Container(
                         width: ResponsiveSize.responsiveWidth(212, context),
                         height: ResponsiveSize.responsiveHeight(52, context),

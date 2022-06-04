@@ -1,4 +1,4 @@
-import 'package:client_app/added_dish_snackbar.dart';
+import 'package:client_app/simple_snack_bar.dart';
 import 'package:client_app/business_logic/cart_bloc/cart_bloc.dart';
 import 'package:client_app/classes/dish.dart';
 import 'package:client_app/repos/repo.dart';
@@ -21,8 +21,8 @@ class Navbar extends StatelessWidget {
         onTap: () {
           BlocProvider.of<CartBloc>(context).add(AddOrIncrementEvent(dish));
           ScaffoldMessenger.of(context).removeCurrentSnackBar();
-          ScaffoldMessenger.of(context).showSnackBar(
-              simpleSnackBar("Блюдо успешно добавлено в корзину!"));
+          showSimpleSnackBar(context,
+              text: "Блюдо успешно добавлено в корзину!");
         },
         child: Container(
           width: ResponsiveSize.responsiveWidth(220, context),

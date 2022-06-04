@@ -1,5 +1,5 @@
 import 'package:cached_network_image/cached_network_image.dart';
-import 'package:client_app/added_dish_snackbar.dart';
+import 'package:client_app/simple_snack_bar.dart';
 import 'package:client_app/business_logic/cart_bloc/cart_bloc.dart';
 import 'package:client_app/classes/dish.dart';
 import 'package:client_app/responsive_size.dart';
@@ -115,9 +115,7 @@ class DishCard extends StatelessWidget {
                                 BlocProvider.of<CartBloc>(context).add(AddOrIncrementEvent(dish));
                                 ScaffoldMessenger.of(context)
                                     .removeCurrentSnackBar();
-                                ScaffoldMessenger.of(context).showSnackBar(
-                                    simpleSnackBar(
-                                        "Блюдо успешно добавлено в корзину!"));
+                                showSimpleSnackBar(context, text: "Блюдо успешно добавлено в корзину!");
                               },
                               child: Container(
                                 height: ResponsiveSize.responsiveHeight(
