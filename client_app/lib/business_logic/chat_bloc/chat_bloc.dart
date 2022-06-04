@@ -114,6 +114,7 @@ class ChatBloc extends Bloc<ChatEvent, ChatState> {
       dishes: dishes,
       totalPrice: total,
       userPhone: number,
+      timestamp: Timestamp.fromDate(DateTime.now())
     );
     await _firebaseFirestore.collection('orders').add(orderData.toJson());
     final action = event.action;
